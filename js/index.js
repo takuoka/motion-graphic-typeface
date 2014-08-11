@@ -1,150 +1,634 @@
-<!-- init -->
-	window.onresize = function() {
-    console.log(window.innerWidth)
-		init.size.x = window.innerWidth;
-		init.size.y = window.innerHeight;
-		init.canvas.width = init.size.x;
-		init.canvas.width = init.size.x;
-		camera.display.x = init.size.x/2;
-		camera.display.y = init.size.y/2;
+
+
+
+
+
+
+
+
+var light = {
+	enableLight : true,
+	ambientLight : {
+		color : {
+			r : 1.0,
+			g : 0,
+			b : 0
+		},
+		intensity : 0.0
+	},
+	directionalLight : {
+		degree : {
+			x : 0,
+			y : 0,
+			z : 1
+		},
+		color : {
+			r : 0,
+			g : 0,
+			b : 1.0
+		},
+		intensity : 1.0
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+var fontmap_firstTitle = function() {
+	this.returnData = new Array();
+	this.col = 80;
+	this.row = 160;
+	this.cellLength = 22;
+	this.cellSpace = 22;
+	for(var i=0; i<DEFIINE_instanceNum; i++) {
+		this.returnData[i] = {
+			shade : false,
+			fill : false,
+			stroke : false,
+			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			size: 0,
+			position: {x:0, y:0, z:0},
+			rotate: {x:0, y:0, z:0}
+		};
 	};
-	var init = {
-		canvas : new Object(),
-		ctx : new Object(),
-		size : new Object(),
-		nodeStrokeFlag : false,
-		canvasSetup : function() {
-			init.canvas = document.getElementById("canvas");
-      init.size.x = window.innerWidth;
-      init.size.y = window.innerWidth;
-			init.canvas.width = init.size.x;
-			init.canvas.height = init.size.y;
-			init.ctx = init.canvas.getContext("2d");
+	this.fontMapData = [
+		{//S
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-3.5, y:this.row*0.15, z:0}, 
+			map : [[0,0,0,4,0],[0,2,1,0,0],[0,0,3,4,0],[0,3,2,1,0],[0,0,1,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//O
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-2.5, y:this.row*0.15, z:0}, 
+			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//L
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-1.5, y:this.row*0.15, z:0}, 
+			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//I
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-0.8, y:this.row*0.15, z:0}, 
+			map : [[0,0,2,0,0],[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//D
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*0, y:this.row*0.15, z:0}, 
+			map : [[0,4,0,0,0],[0,3,3,4,0],[0,5,0,5,0],[0,5,2,1,0],[0,1,1,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//C
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*1, y:this.row*-0.15, z:0}, 
+			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//E
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*2, y:this.row*-0.15, z:0}, 
+			map : [[0,0,2,1,0],[0,2,1,0,0],[0,2,2,1,0],[0,5,0,2,0],[0,1,3,1,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//L
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*3, y:this.row*-0.15, z:0}, 
+			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//L
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*3.6, y:this.row*-0.15, z:0}, 
+			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
 		}
-	};
-	init.canvasSetup();
-
-<!-- init -->
-<!-- utilities -->
-
-	var dtr = function(d) {return d*Math.PI/180};
-	var ceiling = function(num) {return parseInt(num*10000)/10000};
-
-
-	//polarToRectangle
-	var polarToRectangle =  function(dX, dY, radius) {
-		var x = Math.sinE0(dtr(dX)) * Math.cosE0(dtr(dY)) * radius;
-		var y = Math.sinE0(dtr(dX)) * Math.sinE0(dtr(dY)) * radius;
-		var z = Math.cosE0(dtr(dX)) * radius;
-		return {x:y, y:z, z:x};
-	};
-	
-	//rectangleToPolar
-	var rectangleToPolar = function(x, y, z) {
-		if(x == 0)	var xD = 0.001;
-		else		var xD = x;
-		if(y == 0)	var yD = 0.001;
-		else		var yD = y;
-		if(z == 0)	var zD = 0.001;
-		else		var zD = z;
-		var radius = Math.sqrt(xD*xD + yD*yD + zD*zD);
-		var theta = Math.atan(zD / Math.sqrt(xD*xD + yD*yD));
-		var phi = Math.atan(yD / xD);
-		return {x:theta*(180/Math.PI), y:phi*(180/Math.PI), r:radius};
-	};
-
-
-	Math.sinE0 = function(val) {
-		if(val === 0) {
-			return Math.sin(0.000001)
-		} else {
-			return Math.sin(val);
-		};
-	};
-	Math.cosE0 = function(val) {
-		if(val === 0) {
-			return Math.cos(0.000001)
-		} else {
-			return Math.cos(val);
-		};
-	};
-	Math.getVector = function(startVertex, endVertex) {
-		return {
-			x : endVertex.affineOut.x - startVertex.affineOut.x,
-			y : endVertex.affineOut.y - startVertex.affineOut.y,
-			z : endVertex.affineOut.z - startVertex.affineOut.z
-		};
-	};
-	Math.getCross = function(vector1, vector2) {
-		return {
-			x : vector1.y*vector2.z - vector1.z*vector2.y,
-			y : vector1.z*vector2.x - vector1.x*vector2.z,
-			z : vector1.x*vector2.y - vector1.y*vector2.x
-		};
-	};
-	Math.getNormal = function(cross3d) {
-		var length = Math.sqrt(cross3d.x*cross3d.x + cross3d.y*cross3d.y + cross3d.z*cross3d.z);
-		return {
-			x : cross3d.x / length,
-			y : cross3d.y / length,
-			z : cross3d.z / length
-		};
-	};
-	var getNormal = function(vectorSet0, vectorSet1) {
-		var vector1 = Math.getVector(vectorSet0[0],vectorSet0[1]);
-		var vector2 = Math.getVector(vectorSet1[0],vectorSet1[1]);
-		var cross = Math.getCross(vector1, vector2);
-		var normal = Math.getNormal(cross);
-		return normal;
-	};
-	
-	Math.getDot = function(vector1, vector2) {
-		return vector1.x*vector2.x + vector1.y*vector2.y + vector1.z*vector2.z;
-	};
-
-
-	var closeValue = function(minTime, maxTime) {
-		this.flag = 0;
-		
-		this.progress = 0;
-		this.startTime = 0;
-		this.durationTime = 0;
-		
-		this.fromValue = 0;
-		this.toValue = 0;
-		this.smoothFlag = true;
-		
-		this.minValue = 0;
-		this.maxValue = 1;
-		this.minDuration = minTime;
-		this.maxDuration = maxTime;
-	};
-	closeValue.prototype = {
-		init : function() {
-			this.durationTime = this.minDuration + (this.maxDuration-this.minDuration) * Math.random();
-			this.startTime = Date.now();
-			this.progress = Math.min(1, ((Date.now()-this.startTime)/this.durationTime));
-			if(this.smoothFlag == true) {
-				this.fromValue = this.toValue;
-			} else {
-				this.fromValue = Math.random();
+	];
+	var lastMap = 0;
+	for(var i=0; i<this.fontMapData.length; i++) {
+		for(var j=0; j<this.fontMapData[i].map.length; j++) {
+			for(var k=0; k<this.fontMapData[i].map[j].length; k++) {
+				switch(this.fontMapData[i].map[j][k]) {
+					case 0:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = 0;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : 0,
+							y : 0,
+							z : 0
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:0};
+						break;
+					case 1:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
+						break;
+					case 2:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
+						break;
+					case 3:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:90};
+						break;
+					case 4:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:270};
+						break;
+					case 5:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
+						
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
+						break;
+				};
 			};
-			this.toValue = this.minValue + this.maxValue * Math.random();
-			this.flag = 1;
-			return this.fromValue + (this.toValue - this.fromValue) * this.progress;
-		},
-		update : function() {
-			this.progress = Math.min(1, ((Date.now()-this.startTime)/this.durationTime));
-			if(this.progress== 1) this.flag = 0;
-			return this.fromValue + (this.toValue - this.fromValue) * this.progress;
-		},
-		execution : function() {
-			if(this.flag == 0)		{return this.init()}
-			else if(this.flag == 1)	{return this.update()};
-		}
+		};
+		lastMap += this.fontMapData[i].mapDataNum;
 	};
+	return this.returnData;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var fontmap_secondTitle = function() {
+	this.returnData = new Array();
+	this.col = 80;
+	this.row = 160;
+	this.cellLength = 22;
+	this.cellSpace = 22;
+	for(var i=0; i<DEFIINE_instanceNum; i++) {
+		this.returnData[i] = {
+			shade : false,
+			fill : false,
+			stroke : false,
+			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			size: 0,
+			position: {x:0, y:0, z:0},
+			rotate: {x:0, y:0, z:0}
+		};
+	};
+	this.fontMapData = [
+		{//H
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-3.5, y:this.row*0, z:0}, 
+			map : [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]] ,  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//A
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-2.5, y:this.row*0, z:0}, 
+			map : [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//C
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-1.5, y:this.row*0, z:0}, 
+			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//K
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*-0.5, y:this.row*0, z:0}, 
+			map : [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]] ,  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//Y
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*1.0, y:this.row*0, z:0}, 
+			map : [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//O
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*2.0, y:this.row*0, z:0}, 
+			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		},
+		{//U
+			cellLength : this.cellLength,
+			cellSpace : this.cellSpace,
+			center : {x:this.col*3.0, y:this.row*0, z:0}, 
+			map : [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]],  
+			mapDataNum : 5*5*2,
+			colUnit : 5*2
+		}
+	];
+	var lastMap = 0;
+	for(var i=0; i<this.fontMapData.length; i++) {
+		for(var j=0; j<this.fontMapData[i].map.length; j++) {
+			for(var k=0; k<this.fontMapData[i].map[j].length; k++) {
+				switch(this.fontMapData[i].map[j][k]) {
+					case 0:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = 0;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : 0,
+							y : 0,
+							z : 0
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:0};
+						break;
+					case 1:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
+						break;
+					case 2:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
+						break;
+					case 3:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:90};
+						break;
+					case 4:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:270};
+						break;
+					case 5:
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
+						
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
+							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
+							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
+							z : this.fontMapData[i].center.z
+						};
+						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
+						break;
+				};
+			};
+		};
+		lastMap += this.fontMapData[i].mapDataNum;
+	};
+	return this.returnData;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- init -->
+window.onresize = function() {
+console.log(window.innerWidth)
+	init.size.x = window.innerWidth;
+	init.size.y = window.innerHeight;
+	init.canvas.width = init.size.x;
+	init.canvas.width = init.size.x;
+	camera.display.x = init.size.x/2;
+	camera.display.y = init.size.y/2;
+};
+
+
+var init = {
+	canvas : new Object(),
+	ctx : new Object(),
+	size : new Object(),
+	nodeStrokeFlag : false,
+	canvasSetup : function() {
+		init.canvas = document.getElementById("canvas");
+  init.size.x = window.innerWidth;
+  init.size.y = window.innerWidth;
+		init.canvas.width = init.size.x;
+		init.canvas.height = init.size.y;
+		init.ctx = init.canvas.getContext("2d");
+	}
+};
+
+init.canvasSetup();
+
+<!-- init -->
+
+
+
+
+
+
+
+
+
 
 <!-- utilities -->
+
+var dtr = function(d) {return d*Math.PI/180};
+var ceiling = function(num) {return parseInt(num*10000)/10000};
+
+
+//polarToRectangle
+var polarToRectangle =  function(dX, dY, radius) {
+	var x = Math.sinE0(dtr(dX)) * Math.cosE0(dtr(dY)) * radius;
+	var y = Math.sinE0(dtr(dX)) * Math.sinE0(dtr(dY)) * radius;
+	var z = Math.cosE0(dtr(dX)) * radius;
+	return {x:y, y:z, z:x};
+};
+
+//rectangleToPolar
+var rectangleToPolar = function(x, y, z) {
+	if(x == 0)	var xD = 0.001;
+	else		var xD = x;
+	if(y == 0)	var yD = 0.001;
+	else		var yD = y;
+	if(z == 0)	var zD = 0.001;
+	else		var zD = z;
+	var radius = Math.sqrt(xD*xD + yD*yD + zD*zD);
+	var theta = Math.atan(zD / Math.sqrt(xD*xD + yD*yD));
+	var phi = Math.atan(yD / xD);
+	return {x:theta*(180/Math.PI), y:phi*(180/Math.PI), r:radius};
+};
+
+
+Math.sinE0 = function(val) {
+	if(val === 0) {
+		return Math.sin(0.000001)
+	} else {
+		return Math.sin(val);
+	};
+};
+Math.cosE0 = function(val) {
+	if(val === 0) {
+		return Math.cos(0.000001)
+	} else {
+		return Math.cos(val);
+	};
+};
+Math.getVector = function(startVertex, endVertex) {
+	return {
+		x : endVertex.affineOut.x - startVertex.affineOut.x,
+		y : endVertex.affineOut.y - startVertex.affineOut.y,
+		z : endVertex.affineOut.z - startVertex.affineOut.z
+	};
+};
+Math.getCross = function(vector1, vector2) {
+	return {
+		x : vector1.y*vector2.z - vector1.z*vector2.y,
+		y : vector1.z*vector2.x - vector1.x*vector2.z,
+		z : vector1.x*vector2.y - vector1.y*vector2.x
+	};
+};
+Math.getNormal = function(cross3d) {
+	var length = Math.sqrt(cross3d.x*cross3d.x + cross3d.y*cross3d.y + cross3d.z*cross3d.z);
+	return {
+		x : cross3d.x / length,
+		y : cross3d.y / length,
+		z : cross3d.z / length
+	};
+};
+var getNormal = function(vectorSet0, vectorSet1) {
+	var vector1 = Math.getVector(vectorSet0[0],vectorSet0[1]);
+	var vector2 = Math.getVector(vectorSet1[0],vectorSet1[1]);
+	var cross = Math.getCross(vector1, vector2);
+	var normal = Math.getNormal(cross);
+	return normal;
+};
+
+Math.getDot = function(vector1, vector2) {
+	return vector1.x*vector2.x + vector1.y*vector2.y + vector1.z*vector2.z;
+};
+
+
+var closeValue = function(minTime, maxTime) {
+	this.flag = 0;
+	
+	this.progress = 0;
+	this.startTime = 0;
+	this.durationTime = 0;
+	
+	this.fromValue = 0;
+	this.toValue = 0;
+	this.smoothFlag = true;
+	
+	this.minValue = 0;
+	this.maxValue = 1;
+	this.minDuration = minTime;
+	this.maxDuration = maxTime;
+};
+closeValue.prototype = {
+	init : function() {
+		this.durationTime = this.minDuration + (this.maxDuration-this.minDuration) * Math.random();
+		this.startTime = Date.now();
+		this.progress = Math.min(1, ((Date.now()-this.startTime)/this.durationTime));
+		if(this.smoothFlag == true) {
+			this.fromValue = this.toValue;
+		} else {
+			this.fromValue = Math.random();
+		};
+		this.toValue = this.minValue + this.maxValue * Math.random();
+		this.flag = 1;
+		return this.fromValue + (this.toValue - this.fromValue) * this.progress;
+	},
+	update : function() {
+		this.progress = Math.min(1, ((Date.now()-this.startTime)/this.durationTime));
+		if(this.progress== 1) this.flag = 0;
+		return this.fromValue + (this.toValue - this.fromValue) * this.progress;
+	},
+	execution : function() {
+		if(this.flag == 0)		{return this.init()}
+		else if(this.flag == 1)	{return this.update()};
+	}
+};
+
+<!-- utilities -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- 3D pipeline -->
 
@@ -281,32 +765,6 @@ var affine = {
 		ret = affine.perspective(ret);
 		ret = affine.display(ret, display);
 		return ret;
-	}
-};
-
-
-var light = {
-	enableLight : true,
-	ambientLight : {
-		color : {
-			r : 1.0,
-			g : 1.0,
-			b : 1.0
-		},
-		intensity : 0.0
-	},
-	directionalLight : {
-		degree : {
-			x : 0,
-			y : 0,
-			z : 1
-		},
-		color : {
-			r : 1.0,
-			g : 1.0,
-			b : 1.0
-		},
-		intensity : 1.0
 	}
 };
 
@@ -464,6 +922,17 @@ var shader = {
 
 <!-- 3D pipeline -->
 
+
+
+
+
+
+
+
+
+
+
+
 <!-- model -->
 
 var isoscelesRightTriangle = function(argument) {
@@ -603,6 +1072,18 @@ isoscelesRightTriangle.prototype = {
 };
 
 <!-- model -->
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- object -->
 
@@ -1133,367 +1614,6 @@ var fontmap_fullchara = function() {
 };
 
 
-var fontmap_solidcell = function() {
-	this.returnData = new Array();
-	this.col = 80;
-	this.row = 160;
-	this.cellLength = 22;
-	this.cellSpace = 22;
-	for(var i=0; i<DEFIINE_instanceNum; i++) {
-		this.returnData[i] = {
-			shade : false,
-			fill : false,
-			stroke : false,
-			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			size: 0,
-			position: {x:0, y:0, z:0},
-			rotate: {x:0, y:0, z:0}
-		};
-	};
-	this.fontMapData = [
-		{//S
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-3.5, y:this.row*0.15, z:0}, 
-			map : [[0,0,0,4,0],[0,2,1,0,0],[0,0,3,4,0],[0,3,2,1,0],[0,0,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//O
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-2.5, y:this.row*0.15, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//L
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-1.5, y:this.row*0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//I
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-0.8, y:this.row*0.15, z:0}, 
-			map : [[0,0,2,0,0],[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//D
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*0, y:this.row*0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,3,3,4,0],[0,5,0,5,0],[0,5,2,1,0],[0,1,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//C
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*1, y:this.row*-0.15, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//E
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*2, y:this.row*-0.15, z:0}, 
-			map : [[0,0,2,1,0],[0,2,1,0,0],[0,2,2,1,0],[0,5,0,2,0],[0,1,3,1,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//L
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*3, y:this.row*-0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//L
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*3.6, y:this.row*-0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		}
-	];
-	var lastMap = 0;
-	for(var i=0; i<this.fontMapData.length; i++) {
-		for(var j=0; j<this.fontMapData[i].map.length; j++) {
-			for(var k=0; k<this.fontMapData[i].map[j].length; k++) {
-				switch(this.fontMapData[i].map[j][k]) {
-					case 0:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = 0;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : 0,
-							y : 0,
-							z : 0
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:0};
-						break;
-					case 1:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
-						break;
-					case 2:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
-						break;
-					case 3:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:90};
-						break;
-					case 4:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:270};
-						break;
-					case 5:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
-						
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
-						break;
-				};
-			};
-		};
-		lastMap += this.fontMapData[i].mapDataNum;
-	};
-	return this.returnData;
-};
-
-
-var fontmap_hackyou = function() {
-	this.returnData = new Array();
-	this.col = 80;
-	this.row = 160;
-	this.cellLength = 22;
-	this.cellSpace = 22;
-	for(var i=0; i<DEFIINE_instanceNum; i++) {
-		this.returnData[i] = {
-			shade : false,
-			fill : false,
-			stroke : false,
-			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			size: 0,
-			position: {x:0, y:0, z:0},
-			rotate: {x:0, y:0, z:0}
-		};
-	};
-	this.fontMapData = [
-		{//H
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-3.5, y:this.row*0, z:0}, 
-			map : [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]] ,  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//A
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-2.5, y:this.row*0, z:0}, 
-			map : [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//C
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-1.5, y:this.row*0, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//K
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-0.5, y:this.row*0, z:0}, 
-			map : [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]] ,  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//Y
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*1.0, y:this.row*0, z:0}, 
-			map : [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//O
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*2.0, y:this.row*0, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//U
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*3.0, y:this.row*0, z:0}, 
-			map : [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		}
-	];
-	var lastMap = 0;
-	for(var i=0; i<this.fontMapData.length; i++) {
-		for(var j=0; j<this.fontMapData[i].map.length; j++) {
-			for(var k=0; k<this.fontMapData[i].map[j].length; k++) {
-				switch(this.fontMapData[i].map[j][k]) {
-					case 0:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = 0;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : 0,
-							y : 0,
-							z : 0
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:0};
-						break;
-					case 1:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
-						break;
-					case 2:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
-						break;
-					case 3:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:90};
-						break;
-					case 4:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:270};
-						break;
-					case 5:
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2 + lastMap].rotate = {x:0, y:0, z:180};
-						
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].shade = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].fill = true;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].stroke = false;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].size = this.fontMapData[i].cellLength/2;
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].position = {
-							x : (parseInt(k)*this.fontMapData[i].cellSpace - this.fontMapData[i].map[j].length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.x,
-							y : (-parseInt(j)*this.fontMapData[i].cellSpace - -this.fontMapData[i].map.length*this.fontMapData[i].cellSpace/2) + this.fontMapData[i].center.y,
-							z : this.fontMapData[i].center.z
-						};
-						this.returnData[j*this.fontMapData[i].colUnit+k*2+1 + lastMap].rotate = {x:0, y:0, z:0};
-						break;
-				};
-			};
-		};
-		lastMap += this.fontMapData[i].mapDataNum;
-	};
-	return this.returnData;
-};
-
 
 
 var dynamic_001 = {// bold motion
@@ -1648,6 +1768,17 @@ var dynamic_004 = {// rotate motion
 dynamic_004.init();
 
 <!-- motion -->
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- effects -->
 
@@ -1807,65 +1938,76 @@ var invertController = {
 };
 
 
-	var effectCv = new closeValue(300, 500);
-	var effectTimer = function() {
-		var effectVal = effectCv.execution();
-		if(effectVal > 0.7) {
-			shader.chromaticAberration.flag = true;
-			shader.chromaticAberration.r.x = (effectVal-0.75)*4 * 15;
-			shader.chromaticAberration.g.x = (effectVal-0.75)*4 * 0;
-			shader.chromaticAberration.b.x = (effectVal-0.75)*4 * -15;
-		} else if(effectVal < 0.2) {
-			invertController.flag = true;
-		} else {
-			invertController.flag = false;
-			shader.chromaticAberration.flag = false;
-		};
+var effectCv = new closeValue(300, 500);
+var effectTimer = function() {
+	var effectVal = effectCv.execution();
+	if(effectVal > 0.7) {
+		shader.chromaticAberration.flag = true;
+		shader.chromaticAberration.r.x = (effectVal-0.75)*4 * 15;
+		shader.chromaticAberration.g.x = (effectVal-0.75)*4 * 0;
+		shader.chromaticAberration.b.x = (effectVal-0.75)*4 * -15;
+	} else if(effectVal < 0.2) {
+		invertController.flag = true;
+	} else {
+		invertController.flag = false;
+		shader.chromaticAberration.flag = false;
 	};
+};
 
 
 
-	var mousePosX = 0;
-	var mousePosY = 0;
-	document.body.onmousemove = function(e) {
-		mousePosX = (e.pageX-init.size.x)/init.size.x * 30;
-		mousePosY = (e.pageY-init.size.y)/init.size.y * 30;
+var mousePosX = 0;
+var mousePosY = 0;
+document.body.onmousemove = function(e) {
+	mousePosX = (e.pageX-init.size.x)/init.size.x * 30;
+	mousePosY = (e.pageY-init.size.y)/init.size.y * 30;
+};
+var zoomCv = new closeValue(300, 1000);
+var randomSelfCv = new closeValue(300, 400);
+var rotateCv = new closeValue(300, 500);
+var memRotateX = Math.random()*100;
+var memRotateY = Math.random()*100;
+rotateCv.smoothFlag = false;
+var cameraTimer = function() {
+	var zoomVal = zoomCv.execution();
+	if(zoomVal > 0.8) {
+		camera.zoom = 1.5
+	} else if(zoomVal < 0.2) {
+		camera.zoom = 2.2;
+	} else {
+		camera.zoom = 1;
 	};
-	var zoomCv = new closeValue(300, 1000);
-	var randomSelfCv = new closeValue(300, 400);
-	var rotateCv = new closeValue(300, 500);
-	var memRotateX = Math.random()*100;
-	var memRotateY = Math.random()*100;
-	rotateCv.smoothFlag = false;
-	var cameraTimer = function() {
-		var zoomVal = zoomCv.execution();
-		if(zoomVal > 0.8) {
-			camera.zoom = 1.5
-		} else if(zoomVal < 0.2) {
-			camera.zoom = 2.2;
-		} else {
-			camera.zoom = 1;
-		};
-		
-		var randomSelfVal = randomSelfCv.execution();
-		if(randomSelfCv > 0.8) {
-			camera.self.x = Math.random()*10-5;
-			camera.self.y = Math.random()*10-5;
-			camera.self.z = Math.random()*10-5;
-		};
-		memRotateX += 8;
-		memRotateY += 14;
-		var rotateVal = rotateCv.execution();
-		if(rotateVal > 0.8) {
-			camera.rotate.x = memRotateX;
-			camera.rotate.y = memRotateY;
-		} else {
-			camera.rotate.x = 0;
-			camera.rotate.y = 0;
-		};
+	
+	var randomSelfVal = randomSelfCv.execution();
+	if(randomSelfCv > 0.8) {
+		camera.self.x = Math.random()*10-5;
+		camera.self.y = Math.random()*10-5;
+		camera.self.z = Math.random()*10-5;
 	};
+	memRotateX += 8;
+	memRotateY += 14;
+	var rotateVal = rotateCv.execution();
+	if(rotateVal > 0.8) {
+		camera.rotate.x = memRotateX;
+		camera.rotate.y = memRotateY;
+	} else {
+		camera.rotate.x = 0;
+		camera.rotate.y = 0;
+	};
+};
 
 <!-- effects -->
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- controller -->
 
@@ -1882,10 +2024,9 @@ var controll = {
 	staticMap : {
 		freemap_disconnected : freemap_disconnected(),
 		freemap_random : freemap_random(),
-		
 		fontMap_fullchara : fontmap_fullchara(),
-		fontmap_solidcell : fontmap_solidcell(),
-		fontmap_hackyou : fontmap_hackyou()
+		fontmap_firstTitle : fontmap_firstTitle(),
+		fontmap_secondTitle : fontmap_secondTitle()
 	},
 	dynamicFlag : 0,
 	dynamicMap : new Object,
@@ -1926,11 +2067,11 @@ var controll = {
 			case "fontmap_fullchara":
 				controll.endValue[num] = controll.staticMap.fontMap_fullchara[num];
 				break;
-			case "fontmap_solidcell":
-				controll.endValue[num] = controll.staticMap.fontmap_solidcell[num];
+			case "fontmap_firstTitle":
+				controll.endValue[num] = controll.staticMap.fontmap_firstTitle[num];
 				break;
-			case "fontmap_hackyou":
-				controll.endValue[num] = controll.staticMap.fontmap_hackyou[num];
+			case "fontmap_secondTitle":
+				controll.endValue[num] = controll.staticMap.fontmap_secondTitle[num];
 				break;
 		};
 		switch(controll.endValue[num].shade) {
@@ -2076,6 +2217,9 @@ var controll = {
 };
 controll.init();
 
+
+
+
 var staticTransformSeries = function(t) {
 	var inc = 0;
 	var to = function() {
@@ -2096,197 +2240,213 @@ var staticTransformParallel = function(t) {
 };
 
 
+
+
+
+
+
+
+
+
+
+
 <!-- controller -->
 
 
-	objectInit();
-	var loop = function() {
-		cameraTimer();
-		
-		init.ctx.clearRect(0, 0, init.size.x, init.size.y);
-		backgroundController.draw();
-		shader.shadeObject = [];
-		for(var i=0; i<controll.processArray.length; i++) if(controll.processArray[i] != null) controll.processArray[i](i);
-		controll.dynamicTimer();
-		objectUpdate();
-		shader.zSort();
-		shader.flatShader.directionalLighting();
-		
-		invertController.iteration();
-		effectTimer();
-		if(init.nodeStrokeFlag == true) nodeStroke.iteration();
-		
-		shader.execution();
-	};
-	var timerIteration = function() {
-		setTimeout(function() {
-			loop();
-			timerIteration();
-		}, 1000/30);
-	};
-	timerIteration();
+objectInit();
+var loop = function() {
+	cameraTimer();
 	
+	init.ctx.clearRect(0, 0, init.size.x, init.size.y);
+	backgroundController.draw();
+	shader.shadeObject = [];
+	for(var i=0; i<controll.processArray.length; i++) if(controll.processArray[i] != null) controll.processArray[i](i);
+	controll.dynamicTimer();
+	objectUpdate();
+	shader.zSort();
+	shader.flatShader.directionalLighting();
+	
+	invertController.iteration();
+	effectTimer();
+	if(init.nodeStrokeFlag == true) nodeStroke.iteration();
+	
+	shader.execution();
+};
+var timerIteration = function() {
+	setTimeout(function() {
+		loop();
+		timerIteration();
+	}, 1000/30);
+};
+timerIteration();
 
-	var motionSet = [
-		{
-			time : 500,
-			func : function() {
-				init.nodeStrokeFlag = true;
-				controll.staticFlag = "fontmap_solidcell";
-				staticTransformSeries(1000);
-			}
-		},
-		{
-			time : 3000,
-			func : function() {
-				for(var i=0; i<DEFIINE_instanceNum; i++) {
-					instanceObject[i].uniqueFlag001 = true;
-				};
-			}
-		},
-		{
-			time : 1000,
-			func : function() {
-				controll.staticFlag = "freemap_disconnected";
-				staticTransformSeries(800);
-			}
-		},
-		{
-			time : 2500,
-			func : function() {
-				for(var i=0; i<DEFIINE_instanceNum; i++) {
-					instanceObject[i].uniqueFlag001 = false;
-				};
-				controll.dynamicFlag = 0;
-				init.nodeStrokeFlag = false;
-				controll.staticFlag = "fontmap_hackyou";
-				staticTransformSeries(300);
-			}
-		},
-		{
-			time : 2500,
-			func : function() {
-				controll.staticFlag = "freemap_random";
-				staticTransformParallel(1000);
-			}
-		},
-		{
-			time : 1000,
-			func : function() {
-				init.nodeStrokeFlag = true;
-				controll.dynamicFlag = 3;
-			}
-		},
-		
-		{
-			time : 2000,
-			func : function() {
-				controll.staticFlag = "fontmap_solidcell";
-				staticTransformSeries(500);
-			}
-		},
-		{
-			time : 2000,
-			func : function() {
-				controll.staticFlag = "fontmap_solidcell";
-				staticTransformSeries(500);
-			}
-		},
-		{
-			time : 2000,
-			func : function() {
-				controll.staticFlag = "freemap_random";
-				staticTransformSeries(800);
-			}
-		},
-		{
-			time : 2500,
-			func : function() {
-				controll.staticFlag = "freemap_random";
-				staticTransformSeries(800);
-			}
-		},
-		{
-			time : 2000,
-			func : function() {
-				controll.staticFlag = "freemap_random";
-				staticTransformSeries(800);
-			}
-		},
-		{
-			time : 3000,
-			func : function() {
-				controll.staticFlag = "freemap_disconnected";
-				staticTransformSeries(500);
-			}
-		},
-		{
-			time : 1500,
-			func : function() {
-				init.nodeStrokeFlag = false;
-				controll.dynamicFlag = 0;
-				controll.staticFlag = "fontmap_fullchara";
-				staticTransformParallel(1000);
-			}
-		},
-		{
-			time : 1500,
-			func : function() {
-				controll.dynamicFlag = 1;
-			}
-		},
-		{
-			time : 2000,
-			func : function() {
-				controll.dynamicFlag = 2;
-			}
-		},
-		{
-			time : 1500,
-			func : function() {
-				controll.dynamicFlag = 1;
-			}
-		},
-		{
-			time : 1500,
-			func : function() {
-				init.nodeStrokeFlag = true;
-				controll.dynamicFlag = 4;
-			}
-		},
-		{
-			time : 2500,
-			func : function() {
-				init.nodeStrokeFlag = false;
-				controll.dynamicFlag = 0;
-				controll.staticFlag = "fontmap_fullchara";
-				staticTransformParallel(1000);
-			}
-		},
-		{
-			time : 2000,
-			func : function() {
-				init.nodeStrokeFlag = true;
-				controll.dynamicFlag = 0;
-				controll.staticFlag = "freemap_disconnected";
-				staticTransformSeries(800);
-			}
-		},
-		{
-			time : 10000,
-			func : function() {
-			}
-		},
-	];
+
+
+
+var motionSet = [
+	{
+		time : 500,
+		func : function() {
+			init.nodeStrokeFlag = true;
+			controll.staticFlag = "fontmap_firstTitle";
+			staticTransformSeries(1000);
+		}
+	},
+	{
+		time : 3000,
+		func : function() {
+			for(var i=0; i<DEFIINE_instanceNum; i++) {
+				instanceObject[i].uniqueFlag001 = true;
+			};
+		}
+	},
+	{
+		time : 1000,
+		func : function() {
+			controll.staticFlag = "freemap_disconnected";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 2500,
+		func : function() {
+			for(var i=0; i<DEFIINE_instanceNum; i++) {
+				instanceObject[i].uniqueFlag001 = false;
+			};
+			controll.dynamicFlag = 0;
+			init.nodeStrokeFlag = false;
+			controll.staticFlag = "fontmap_secondTitle";
+			staticTransformSeries(300);
+		}
+	},
+	{
+		time : 2500,
+		func : function() {
+			controll.staticFlag = "freemap_random";
+			staticTransformParallel(1000);
+		}
+	},
+	{
+		time : 1000,
+		func : function() {
+			init.nodeStrokeFlag = true;
+			controll.dynamicFlag = 3;
+		}
+	},
 	
-	var motionIndex = 0;
-	var motionChanger = function() {
-		setTimeout(function() {
-			motionSet[motionIndex].func();
-			motionIndex++;
-			if(motionSet.length == motionIndex) motionIndex = 0; 
-			motionChanger();
-		}, motionSet[motionIndex].time);
-	};
-	motionChanger();
-	
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "fontmap_firstTitle";
+			staticTransformSeries(500);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "fontmap_firstTitle";
+			staticTransformSeries(500);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "freemap_random";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 2500,
+		func : function() {
+			controll.staticFlag = "freemap_random";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "freemap_random";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 3000,
+		func : function() {
+			controll.staticFlag = "freemap_disconnected";
+			staticTransformSeries(500);
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			init.nodeStrokeFlag = false;
+			controll.dynamicFlag = 0;
+			controll.staticFlag = "fontmap_fullchara";
+			staticTransformParallel(1000);
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			controll.dynamicFlag = 1;
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.dynamicFlag = 2;
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			controll.dynamicFlag = 1;
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			init.nodeStrokeFlag = true;
+			controll.dynamicFlag = 4;
+		}
+	},
+	{
+		time : 2500,
+		func : function() {
+			init.nodeStrokeFlag = false;
+			controll.dynamicFlag = 0;
+			controll.staticFlag = "fontmap_fullchara";
+			staticTransformParallel(1000);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			init.nodeStrokeFlag = true;
+			controll.dynamicFlag = 0;
+			controll.staticFlag = "freemap_disconnected";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 10000,
+		func : function() {
+		}
+	},
+];
+
+
+
+var motionIndex = 0;
+
+var motionChanger = function() {
+	setTimeout(function() {
+		motionSet[motionIndex].func();
+		motionIndex++;
+		if(motionSet.length == motionIndex) motionIndex = 0; 
+		motionChanger();
+	}, motionSet[motionIndex].time);
+};
+
+motionChanger();
+

@@ -251,45 +251,37 @@ FIRST_TITLE_FONT_MAP_ARRAY = [
 
 SECOND_TITLE_FONT_MAP_ARRAY = [
 	{
-		center : {x:-4 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['I'],  
-	},
-	{
-		center : {x:-3 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['M'],  
-	},
-	{
-		center : {x:-2 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['A'],  
-	},
-	{
-		center : {x:-1 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['G'],  
-	},
-	{
-		center : {x:0 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['I'],  
-	},
-	{
-		center : {x:1 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['N'],  
-	},
-	{
-		center : {x:2 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['A'],  
-	},
-	{
-		center : {x:3 -0.3, y:0, z:0}, 
+		center : {x:-4 +0.5, y:0, z:0}, 
 		map : CHAR_MAP['T'],  
 	},
 	{
-		center : {x:4 -0.3, y:0, z:0}, 
+		center : {x:-3 +0.5, y:0, z:0}, 
+		map : CHAR_MAP['A'],  
+	},
+	{
+		center : {x:-2 +0.5, y:0, z:0}, 
+		map : CHAR_MAP['K'],  
+	},
+	{
+		center : {x:-1 +0.5, y:0, z:0}, 
+		map : CHAR_MAP['U'],  
+	},
+	{
+		center : {x:0 +0.5, y:0, z:0}, 
+		map : CHAR_MAP['.'],  
+	},
+	{
+		center : {x:1 +0.5, y:0, z:0}, 
 		map : CHAR_MAP['O'],  
 	},
 	{
-		center : {x:5 -0.3, y:0, z:0}, 
-		map : CHAR_MAP['N'],  
-	}
+		center : {x:2 +0.5, y:0, z:0}, 
+		map : CHAR_MAP['K'],  
+	},
+	{
+		center : {x:3 +0.5, y:0, z:0}, 
+		map : CHAR_MAP['A'],  
+	},
 ];
 
 
@@ -2765,31 +2757,6 @@ timerIteration();
 
 var motionSet = [
 
-	// {
-	// 	time : 500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = true;
-	// 		controll.staticFlag = "fontmap_firstTitle";
-	// 		staticTransformSeries(1000);
-	// 	}
-	// },
-	// {
-	// 	time : 3000,
-	// 	func : function() {
-	// 		for(var i=0; i<DEFIINE_instanceNum; i++) {
-	// 			instanceObject[i].uniqueFlag001 = true;
-	// 		};
-	// 	}
-	// },
-	// {
-	// 	time : 1000,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_disconnected";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-
-
 
 	{
 		time : 500,
@@ -2798,38 +2765,42 @@ var motionSet = [
 				instanceObject[i].uniqueFlag001 = false;
 			};
 			controll.dynamicFlag = 0;
-			init.nodeStrokeFlag = true;
+			init.nodeStrokeFlag = false;
 			controll.staticFlag = "fontmap_secondTitle";
-			staticTransformSeries(100);//速さ
+			staticTransformSeries(100);//うごき
 		}
 	},
 
-	
 	{
 		time : 3700,
 		func : function() {
 			controll.staticFlag = "freemap_random";
-			staticTransformParallel(1000);
+			staticTransformParallel(400);
 		}
 	},
+
+
 
 
 	{
-		time : 500,
+		time : 600,
 		func : function() {
-			init.nodeStrokeFlag = false;
-			controll.dynamicFlag = 2;
+			init.nodeStrokeFlag = true;
 			controll.staticFlag = "fontmap_firstTitle";
-			staticTransformSeries(50);
+			staticTransformSeries(100);
 		}
 	},
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.staticFlag = "fontmap_firstTitle";
-	// 		staticTransformSeries(500);
-	// 	}
-	// },
+
+	{
+		time : 3000,
+		func : function() {
+			for(var i=0; i<DEFIINE_instanceNum; i++) {
+				instanceObject[i].uniqueFlag001 = true;
+			};
+		}
+	},
+
+
 	{
 		time : 3000,
 		func : function() {
@@ -2838,10 +2809,32 @@ var motionSet = [
 		}
 	},
 	{
-		time : 2000,
+		time : 5000,
 		func : function() {
 		}
 	},
+
+	// {
+	// 	time : 500,
+	// 	func : function() {
+	// 		init.nodeStrokeFlag = false;
+	// 		controll.dynamicFlag = 2;
+	// 		controll.staticFlag = "fontmap_firstTitle";
+	// 		staticTransformSeries(50);
+	// 	}
+	// },
+
+
+	// {
+	// 	time : 2000,
+	// 	func : function() {
+	// 		controll.staticFlag = "fontmap_firstTitle";
+	// 		staticTransformSeries(500);
+	// 	}
+	// },
+
+
+
 	// {
 	// 	time : 2500,
 	// 	func : function() {

@@ -766,7 +766,7 @@ console.log(window.innerWidth)
 	init.size.x = window.innerWidth;
 	init.size.y = window.innerHeight;
 	init.canvas.width = init.size.x;
-	init.canvas.width = init.size.x;
+	init.canvas.height = init.size.y;
 	camera.display.x = init.size.x/2;
 	camera.display.y = init.size.y/2;
 };
@@ -779,8 +779,8 @@ var init = {
 	nodeStrokeFlag : false,
 	canvasSetup : function() {
 		init.canvas = document.getElementById("canvas");
-  init.size.x = window.innerWidth;
-  init.size.y = window.innerWidth;
+	  init.size.x = window.innerWidth;
+	  init.size.y = window.innerHeight;
 		init.canvas.width = init.size.x;
 		init.canvas.height = init.size.y;
 		init.ctx = init.canvas.getContext("2d");
@@ -2949,7 +2949,6 @@ var motionSet = [
 	},
 
 
-
 	{
 		time : 2500,
 		func : function() {
@@ -2974,110 +2973,9 @@ var motionSet = [
 	{
 		time : 1000,
 		func : function() {
-			init.nodeStrokeFlag = true;
-			controll.dynamicFlag = 3;
 		}
 	},
 	
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.staticFlag = "fontmap_firstTitle";
-	// 		staticTransformSeries(500);
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.staticFlag = "fontmap_firstTitle";
-	// 		staticTransformSeries(500);
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_random";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-	// {
-	// 	time : 2500,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_random";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_random";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-	// {
-	// 	time : 3000,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_disconnected";
-	// 		staticTransformSeries(500);
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = false;
-	// 		controll.dynamicFlag = 0;
-	// 		controll.staticFlag = "fontmap_fullchara";
-	// 		staticTransformParallel(1000);
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		controll.dynamicFlag = 1;
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.dynamicFlag = 2;
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		controll.dynamicFlag = 1;
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = true;
-	// 		controll.dynamicFlag = 4;
-	// 	}
-	// },
-	// {
-	// 	time : 2500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = false;
-	// 		controll.dynamicFlag = 0;
-	// 		controll.staticFlag = "fontmap_fullchara";
-	// 		staticTransformParallel(1000);
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = true;
-	// 		controll.dynamicFlag = 0;
-	// 		controll.staticFlag = "freemap_disconnected";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-	// {
-	// 	time : 10000,
-	// 	func : function() {
-	// 	}
-	// },
 ];
 
 

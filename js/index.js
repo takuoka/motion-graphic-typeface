@@ -1,6 +1,307 @@
 
 
 
+//TODO
+//それぞれのオブジェクト描画するときに色を変えたい
+//描画してるところを探す
+
+
+
+var COLOR_CONFIG = {
+	background_and_lines: {
+		light: {
+			background: "rgba(255,255,255,1)",
+			line: {
+				r: 0.0,
+				g: 0.0,
+				b: 0.0
+			}
+		},
+		dark: {
+			background: "rgba(0,0,0,1)",
+			line: {
+				r: 1.0,
+				g: 1.0,
+				b: 1.0
+			}
+		}
+	},
+	//文字に優しく影響する全体的な照明？
+	ambientLight: {
+		r : 1.0,
+		g : 1.0,
+		b : 1.0
+	},
+	//文字とかの色
+	directionalLight:{
+		r : 1.0,
+		g : 1.0,
+		b : 1.0
+	}
+}
+
+
+
+CHAR_MAP = {
+	'A': [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],
+	'B': [[0,4,0,0,0],[0,3,3,4,0],[0,5,3,1,0],[0,5,2,1,0],[0,3,1,0,0]],
+	'C': [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],
+	'D': [[0,4,0,0,0],[0,3,3,4,0],[0,5,0,5,0],[0,5,2,1,0],[0,1,1,0,0]],
+	'E': [[0,0,2,1,0],[0,2,1,0,0],[0,2,2,1,0],[0,5,0,2,0],[0,1,3,1,0]],
+	'F': [[0,0,2,1,0],[0,2,1,0,0],[0,2,2,1,0],[0,5,0,0,0],[0,1,0,0,0]],
+	'G': [[0,0,2,0,0],[0,2,1,0,0],[0,1,0,4,0],[0,3,2,1,0],[0,0,3,0,0]],
+	'H': [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]],
+	'I': [[0,0,2,0,0],[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0]],
+	'J': [[0,0,0,2,0],[0,0,0,5,0],[0,0,0,5,0],[0,4,2,1,0],[0,0,1,0,0]],
+	'K': [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]],
+	'L': [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],
+	'M': [[0,4,0,0,0],[0,5,4,4,0],[0,5,3,3,4],[0,3,0,0,3],[0,3,0,0,0]],
+	'N': [[0,0,0,4,0],[0,4,0,5,0],[0,5,4,4,0],[0,5,3,5,0],[0,1,0,3,0]],
+	'O': [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],
+	'P': [[0,4,0,0,0],[0,5,3,4,0],[0,3,4,1,0],[0,5,0,0,0],[0,1,0,0,0]],
+	'Q': [[0,0,4,0,0],[0,2,1,4,0],[0,1,2,3,0],[0,3,2,5,0],[0,0,3,0,0]],
+	'R': [[0,4,0,0,0],[0,5,3,4,0],[0,3,4,1,0],[0,5,0,4,0],[0,1,0,3,0]],
+	'S': [[0,0,0,4,0],[0,2,1,0,0],[0,0,3,4,0],[0,3,2,1,0],[0,0,1,0,0]],
+	'T': [[0,2,5,1,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,2,0,0],[0,0,1,0,0]],
+	'U': [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]],
+	'V': [[0,0,0,2,0],[0,0,0,5,0],[0,4,0,2,0],[0,3,4,1,0],[0,0,3,0,0]],
+	'W': [[0,2,0,0,0],[0,2,0,0,2],[0,5,2,2,1],[0,5,1,1,0],[0,1,0,0,0]],
+	'X': [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,2,1,4,0],[0,1,0,3,0]],
+	'Y': [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]],
+	'Z': [[0,0,0,0,0],[0,2,5,1,0],[0,0,2,1,0],[0,2,1,0,0],[2,5,1,1,0]],
+	'.': [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,5,0,0,0]],
+	',': [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,1,0,0,0]],
+	'!': [[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0],[0,0,1,0,0]],
+	'?': [[0,0,2,4,0],[0,0,0,2,0],[0,0,2,1,0],[0,0,1,0,0],[0,0,1,0,0]],
+	'1': [[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,3,0,0]],
+	'2': [[0,0,0,0,0],[0,0,3,4,0],[0,0,2,1,0],[0,2,1,0,0],[0,3,2,4,0]],
+	'3': [[0,0,0,0,0],[0,0,3,4,0],[0,0,2,1,0],[0,0,2,1,0],[0,2,1,0,0]],
+	'4': [[0,0,0,0,0],[0,0,2,1,0],[0,2,1,2,0],[0,3,2,5,0],[0,0,0,1,0]],
+	'5': [[0,0,0,0,0],[0,0,2,1,0],[0,2,4,0,0],[0,0,3,4,0],[0,0,2,1,0]],
+	'6': [[0,0,0,0,0],[0,2,1,0,0],[0,5,4,0,0],[0,3,0,4,0],[0,0,3,1,0]],
+	'7': [[0,0,0,0,0],[0,2,1,5,0],[0,0,2,1,0],[0,2,1,0,0],[0,1,0,0,0]],
+	'8': [[0,0,0,0,0],[0,0,2,4,0],[0,0,1,1,0],[0,2,3,4,0],[0,3,2,1,0]],
+	'9': [[0,0,0,0,0],[0,2,1,4,0],[0,3,2,1,0],[0,2,1,0,0],[0,1,0,0,0]],
+	'0': [[0,0,0,0,0],[0,0,2,4,0],[0,2,1,2,0],[0,1,2,1,0],[0,3,1,0,0]]
+}
+
+
+
+// FIRST_TITLE_FONT_MAP_ARRAY = [
+// 	{//S
+// 		center : {x:-3.5, y:0.15, z:0}, 
+// 		map : [
+// 		[0,0,0,4,0],
+// 		[0,2,1,0,0],
+// 		[0,0,3,4,0],
+// 		[0,3,2,1,0],
+// 		[0,0,1,0,0]],  
+// 	},
+// 	{//O
+// 		center : {x:-2.5, y:0.15, z:0}, 
+// 		map : [
+// 		[0,0,4,0,0],
+// 		[0,2,1,4,0],
+// 		[0,1,0,3,0],
+// 		[0,3,4,1,0],
+// 		[0,0,3,0,0]],  
+// 	},
+// 	{//L
+// 		center : {x:-1.5, y:0.15, z:0}, 
+// 		map : [
+// 		[0,4,0,0,0],
+// 		[0,5,0,0,0],
+// 		[0,5,0,0,0],
+// 		[0,3,0,0,0],
+// 		[0,0,3,4,0]],  
+// 	},
+// 	{//I
+// 		center : {x:-0.8, y:0.15, z:0}, 
+// 		map : [
+// 		[0,0,2,0,0],
+// 		[0,0,2,0,0],
+// 		[0,0,5,0,0],
+// 		[0,0,5,0,0],
+// 		[0,0,1,0,0]],  
+// 	},
+// 	{//D
+// 		center : {x:0, y:0.15, z:0}, 
+// 		map : [
+// 		[0,4,0,0,0],
+// 		[0,3,3,4,0],
+// 		[0,5,0,5,0],
+// 		[0,5,2,1,0],
+// 		[0,1,1,0,0]],  
+// 	},
+// 	{//C
+// 		center : {x:1, y:-0.15, z:0}, 
+// 		map : [
+// 		[0,0,4,0,0],
+// 		[0,2,1,4,0],
+// 		[0,1,0,0,0],
+// 		[0,3,4,1,0],
+// 		[0,0,3,0,0]],  
+// 	},
+// 	{//E
+// 		center : {x:2, y:-0.15, z:0}, 
+// 		map : [
+// 		[0,0,2,1,0],
+// 		[0,2,1,0,0],
+// 		[0,2,2,1,0],
+// 		[0,5,0,2,0],
+// 		[0,1,3,1,0]],  
+// 	},
+// 	{//L
+// 		center : {x:3, y:-0.15, z:0}, 
+// 		map : [
+// 		[0,4,0,0,0],
+// 		[0,5,0,0,0],
+// 		[0,5,0,0,0],
+// 		[0,3,0,0,0],
+// 		[0,0,3,4,0]],  
+// 	},
+// 	{//L
+// 		center : {x:3.6, y:-0.15, z:0}, 
+// 		map : [
+// 		[0,4,0,0,0],
+// 		[0,5,0,0,0],
+// 		[0,5,0,0,0],
+// 		[0,3,0,0,0],
+// 		[0,0,3,4,0]],  
+// 	}
+// ]
+
+
+FIRST_TITLE_FONT_MAP_ARRAY = [
+	{
+		center : {x:-4 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['C'],  
+	},
+	{
+		center : {x:-3 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['R'],  
+	},
+	{
+		center : {x:-2 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['E'],  
+	},
+	{
+		center : {x:-1 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['A'],  
+	},
+	{
+		center : {x:0 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['T'],  
+	},
+	{
+		center : {x:1 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['I'],  
+	},
+	{
+		center : {x:2 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['O'],  
+	},
+	{
+		center : {x:3 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['N'],  
+	},
+	{
+		center : {x:4 -0.0, y:0, z:0}, 
+		map : CHAR_MAP['!'],  
+	},
+	// {
+	// 	center : {x:5 -0.3, y:0, z:0}, 
+	// 	map : CHAR_MAP['N'],  
+	// }
+]
+
+
+// SECOND_TITLE_FONT_MAP_ARRAY = [
+// 	{//H
+// 		center : {x:-3.5, y:0, z:0}, 
+// 		map : [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]]
+// 	},
+// 	{//A
+// 		center : {x:-2.5, y:0, z:0}, 
+// 		map : [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]]
+// 	},
+// 	{//C
+// 		center : {x:-1.5, y:0, z:0}, 
+// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]]
+// 	},
+// 	{//K
+// 		center : {x:-0.5, y:0, z:0}, 
+// 		map : [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]]
+// 	},
+// 	{//Y
+// 		center : {x:1.0, y:0, z:0}, 
+// 		map : [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]]
+// 	},
+// 	{//O
+// 		center : {x:2.0, y:0, z:0}, 
+// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]]
+// 	},
+// 	{//U
+// 		center : {x:3.0, y:0, z:0}, 
+// 		map : [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]]
+// 	}
+// ];
+
+
+
+SECOND_TITLE_FONT_MAP_ARRAY = [
+	{
+		center : {x:-4 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['I'],  
+	},
+	{
+		center : {x:-3 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['M'],  
+	},
+	{
+		center : {x:-2 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['A'],  
+	},
+	{
+		center : {x:-1 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['G'],  
+	},
+	{
+		center : {x:0 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['I'],  
+	},
+	{
+		center : {x:1 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['N'],  
+	},
+	{
+		center : {x:2 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['A'],  
+	},
+	{
+		center : {x:3 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['T'],  
+	},
+	{
+		center : {x:4 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['O'],  
+	},
+	{
+		center : {x:5 -0.3, y:0, z:0}, 
+		map : CHAR_MAP['N'],  
+	}
+];
+
+
+
+
+
+
+
+
+
+
+//----------------------------------- end of config ------------------------------
 
 
 
@@ -10,9 +311,9 @@ var light = {
 	enableLight : true,
 	ambientLight : {
 		color : {
-			r : 1.0,
-			g : 0,
-			b : 0
+			r : COLOR_CONFIG.ambientLight.r,// 1.0
+			g : COLOR_CONFIG.ambientLight.g,// 1.0
+			b : COLOR_CONFIG.ambientLight.b// 1.0
 		},
 		intensity : 0.0
 	},
@@ -23,19 +324,13 @@ var light = {
 			z : 1
 		},
 		color : {
-			r : 0,
-			g : 0,
-			b : 1.0
+			r : COLOR_CONFIG.directionalLight.r,// 1.0
+			g : COLOR_CONFIG.directionalLight.g,// 1.0
+			b : COLOR_CONFIG.directionalLight.b// 1.0
 		},
 		intensity : 1.0
 	}
 };
-
-
-
-
-
-
 
 
 
@@ -61,80 +356,90 @@ var fontmap_firstTitle = function() {
 			rotate: {x:0, y:0, z:0}
 		};
 	};
-	this.fontMapData = [
-		{//S
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-3.5, y:this.row*0.15, z:0}, 
-			map : [[0,0,0,4,0],[0,2,1,0,0],[0,0,3,4,0],[0,3,2,1,0],[0,0,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//O
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-2.5, y:this.row*0.15, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//L
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-1.5, y:this.row*0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//I
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-0.8, y:this.row*0.15, z:0}, 
-			map : [[0,0,2,0,0],[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//D
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*0, y:this.row*0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,3,3,4,0],[0,5,0,5,0],[0,5,2,1,0],[0,1,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//C
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*1, y:this.row*-0.15, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//E
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*2, y:this.row*-0.15, z:0}, 
-			map : [[0,0,2,1,0],[0,2,1,0,0],[0,2,2,1,0],[0,5,0,2,0],[0,1,3,1,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//L
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*3, y:this.row*-0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//L
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*3.6, y:this.row*-0.15, z:0}, 
-			map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		}
-	];
+	// this.fontMapData = [
+	// 	{//S
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-3.5, y:this.row*0.15, z:0}, 
+	// 		map : [[0,0,0,4,0],[0,2,1,0,0],[0,0,3,4,0],[0,3,2,1,0],[0,0,1,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//O
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-2.5, y:this.row*0.15, z:0}, 
+	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//L
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-1.5, y:this.row*0.15, z:0}, 
+	// 		map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//I
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-0.8, y:this.row*0.15, z:0}, 
+	// 		map : [[0,0,2,0,0],[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//D
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*0, y:this.row*0.15, z:0}, 
+	// 		map : [[0,4,0,0,0],[0,3,3,4,0],[0,5,0,5,0],[0,5,2,1,0],[0,1,1,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//C
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*1, y:this.row*-0.15, z:0}, 
+	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//E
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*2, y:this.row*-0.15, z:0}, 
+	// 		map : [[0,0,2,1,0],[0,2,1,0,0],[0,2,2,1,0],[0,5,0,2,0],[0,1,3,1,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//L
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*3, y:this.row*-0.15, z:0}, 
+	// 		map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//L
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*3.6, y:this.row*-0.15, z:0}, 
+	// 		map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	}
+	// ];
+	this.fontMapData = FIRST_TITLE_FONT_MAP_ARRAY;
+	for (i in this.fontMapData) {
+		this.fontMapData[i].cellLength = this.cellLength;
+		this.fontMapData[i].cellSpace = this.cellSpace;
+		this.fontMapData[i].center.x *= this.col
+		this.fontMapData[i].center.y *= this.row
+		this.fontMapData[i].mapDataNum = 5 * 5 * 2
+		this.fontMapData[i].colUnit = 5 * 2
+	}
+
 	var lastMap = 0;
 	for(var i=0; i<this.fontMapData.length; i++) {
 		for(var j=0; j<this.fontMapData[i].map.length; j++) {
@@ -262,64 +567,73 @@ var fontmap_secondTitle = function() {
 			rotate: {x:0, y:0, z:0}
 		};
 	};
-	this.fontMapData = [
-		{//H
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-3.5, y:this.row*0, z:0}, 
-			map : [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]] ,  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//A
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-2.5, y:this.row*0, z:0}, 
-			map : [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//C
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-1.5, y:this.row*0, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//K
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*-0.5, y:this.row*0, z:0}, 
-			map : [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]] ,  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//Y
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*1.0, y:this.row*0, z:0}, 
-			map : [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//O
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*2.0, y:this.row*0, z:0}, 
-			map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		},
-		{//U
-			cellLength : this.cellLength,
-			cellSpace : this.cellSpace,
-			center : {x:this.col*3.0, y:this.row*0, z:0}, 
-			map : [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]],  
-			mapDataNum : 5*5*2,
-			colUnit : 5*2
-		}
-	];
+	// this.fontMapData = [
+	// 	{//H
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-3.5, y:this.row*0, z:0}, 
+	// 		map : [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]] ,  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//A
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-2.5, y:this.row*0, z:0}, 
+	// 		map : [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//C
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-1.5, y:this.row*0, z:0}, 
+	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//K
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*-0.5, y:this.row*0, z:0}, 
+	// 		map : [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]] ,  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//Y
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*1.0, y:this.row*0, z:0}, 
+	// 		map : [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//O
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*2.0, y:this.row*0, z:0}, 
+	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	},
+	// 	{//U
+	// 		cellLength : this.cellLength,
+	// 		cellSpace : this.cellSpace,
+	// 		center : {x:this.col*3.0, y:this.row*0, z:0}, 
+	// 		map : [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]],  
+	// 		mapDataNum : 5*5*2,
+	// 		colUnit : 5*2
+	// 	}
+	// ];
+	this.fontMapData = SECOND_TITLE_FONT_MAP_ARRAY;
+	for (i in this.fontMapData) {
+		this.fontMapData[i].cellLength = this.cellLength;
+		this.fontMapData[i].cellSpace = this.cellSpace;
+		this.fontMapData[i].center.x *= this.col
+		this.fontMapData[i].center.y *= this.row
+		this.fontMapData[i].mapDataNum = 5 * 5 * 2
+		this.fontMapData[i].colUnit = 5 * 2
+	}
 	var lastMap = 0;
 	for(var i=0; i<this.fontMapData.length; i++) {
 		for(var j=0; j<this.fontMapData[i].map.length; j++) {
@@ -1913,26 +2227,27 @@ var nodeStroke = {
 nodeStroke.init();
 
 
+
 var invertController = {
 	flag : false,
 	iteration : function() {
 		if(invertController.flag == true) {
 			light.enableLight = false;
-			backgroundController.color = "rgba(255,255,255,1)";
-			nodeStroke.color.r = 0.0;
-			nodeStroke.color.g = 0.0;
-			nodeStroke.color.b = 0.0;
+			backgroundController.color = COLOR_CONFIG.background_and_lines.light.background;//"rgba(255,255,255,1)";
+			nodeStroke.color.r = COLOR_CONFIG.background_and_lines.light.line.r;//0.0;
+			nodeStroke.color.g = COLOR_CONFIG.background_and_lines.light.line.g;//0.0;
+			nodeStroke.color.b = COLOR_CONFIG.background_and_lines.light.line.b;//0.0;
 			for(var i=0; i<DEFIINE_instanceNum; i++) {
 				instanceObject[i].fillColor.r = 1.0 - instanceObject[i].fillColor.r;
 				instanceObject[i].fillColor.g = 1.0 - instanceObject[i].fillColor.g;
 				instanceObject[i].fillColor.b = 1.0 - instanceObject[i].fillColor.b;
 			};
 		} else {
-			nodeStroke.color.r = 1.0;
-			nodeStroke.color.g = 1.0;
-			nodeStroke.color.b = 1.0;
+			nodeStroke.color.r = COLOR_CONFIG.background_and_lines.dark.line.r;//1.0;
+			nodeStroke.color.g = COLOR_CONFIG.background_and_lines.dark.line.g;//1.0;
+			nodeStroke.color.b = COLOR_CONFIG.background_and_lines.dark.line.b;//1.0;
 			light.enableLight = true;
-			backgroundController.color = "rgba(0,0,0,1)";
+			backgroundController.color = COLOR_CONFIG.background_and_lines.dark.background;//"rgba(0,0,0,1)";
 		};
 	}
 };
@@ -2239,20 +2554,22 @@ var staticTransformParallel = function(t) {
 	};
 };
 
-
-
-
-
-
-
-
-
-
-
-
 <!-- controller -->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+//ここでループしてる
 objectInit();
 var loop = function() {
 	cameraTimer();
@@ -2272,170 +2589,340 @@ var loop = function() {
 	
 	shader.execution();
 };
+
+var IS_END = false;
+
 var timerIteration = function() {
 	setTimeout(function() {
 		loop();
-		timerIteration();
-	}, 1000/30);
+		if (!IS_END) timerIteration();
+	}, 1000/30);//デフォ30
 };
 timerIteration();
 
 
 
 
+// var motionSet = [
+// 	{
+// 		time : 500,
+// 		func : function() {
+// 			init.nodeStrokeFlag = true;
+// 			controll.staticFlag = "fontmap_firstTitle";
+// 			staticTransformSeries(1000);
+// 		}
+// 	},
+// 	{
+// 		time : 3000,
+// 		func : function() {
+// 			for(var i=0; i<DEFIINE_instanceNum; i++) {
+// 				instanceObject[i].uniqueFlag001 = true;
+// 			};
+// 		}
+// 	},
+// 	{
+// 		time : 1000,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_disconnected";
+// 			staticTransformSeries(800);
+// 		}
+// 	},
+
+
+
+// 	{
+// 		time : 2500,
+// 		func : function() {
+// 			for(var i=0; i<DEFIINE_instanceNum; i++) {
+// 				instanceObject[i].uniqueFlag001 = false;
+// 			};
+// 			controll.dynamicFlag = 0;
+// 			init.nodeStrokeFlag = false;
+// 			controll.staticFlag = "fontmap_secondTitle";
+// 			staticTransformSeries(300);
+// 		}
+// 	},
+
+
+// 	{
+// 		time : 2500,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_random";
+// 			staticTransformParallel(1000);
+// 		}
+// 	},
+// 	{
+// 		time : 1000,
+// 		func : function() {
+// 			init.nodeStrokeFlag = true;
+// 			controll.dynamicFlag = 3;
+// 		}
+// 	},
+	
+// 	{
+// 		time : 2000,
+// 		func : function() {
+// 			controll.staticFlag = "fontmap_firstTitle";
+// 			staticTransformSeries(500);
+// 		}
+// 	},
+// 	{
+// 		time : 2000,
+// 		func : function() {
+// 			controll.staticFlag = "fontmap_firstTitle";
+// 			staticTransformSeries(500);
+// 		}
+// 	},
+// 	{
+// 		time : 2000,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_random";
+// 			staticTransformSeries(800);
+// 		}
+// 	},
+// 	{
+// 		time : 2500,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_random";
+// 			staticTransformSeries(800);
+// 		}
+// 	},
+// 	{
+// 		time : 2000,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_random";
+// 			staticTransformSeries(800);
+// 		}
+// 	},
+// 	{
+// 		time : 3000,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_disconnected";
+// 			staticTransformSeries(500);
+// 		}
+// 	},
+// 	{
+// 		time : 1500,
+// 		func : function() {
+// 			init.nodeStrokeFlag = false;
+// 			controll.dynamicFlag = 0;
+// 			controll.staticFlag = "fontmap_fullchara";
+// 			staticTransformParallel(1000);
+// 		}
+// 	},
+// 	{
+// 		time : 1500,
+// 		func : function() {
+// 			controll.dynamicFlag = 1;
+// 		}
+// 	},
+// 	{
+// 		time : 2000,
+// 		func : function() {
+// 			controll.dynamicFlag = 2;
+// 		}
+// 	},
+// 	{
+// 		time : 1500,
+// 		func : function() {
+// 			controll.dynamicFlag = 1;
+// 		}
+// 	},
+// 	{
+// 		time : 1500,
+// 		func : function() {
+// 			init.nodeStrokeFlag = true;
+// 			controll.dynamicFlag = 4;
+// 		}
+// 	},
+// 	{
+// 		time : 2500,
+// 		func : function() {
+// 			init.nodeStrokeFlag = false;
+// 			controll.dynamicFlag = 0;
+// 			controll.staticFlag = "fontmap_fullchara";
+// 			staticTransformParallel(1000);
+// 		}
+// 	},
+// 	{
+// 		time : 2000,
+// 		func : function() {
+// 			init.nodeStrokeFlag = true;
+// 			controll.dynamicFlag = 0;
+// 			controll.staticFlag = "freemap_disconnected";
+// 			staticTransformSeries(800);
+// 		}
+// 	},
+// 	{
+// 		time : 10000,
+// 		func : function() {
+// 		}
+// 	},
+// ];
+
+
+
+
 var motionSet = [
+
+	// {
+	// 	time : 500,
+	// 	func : function() {
+	// 		init.nodeStrokeFlag = true;
+	// 		controll.staticFlag = "fontmap_firstTitle";
+	// 		staticTransformSeries(1000);
+	// 	}
+	// },
+	// {
+	// 	time : 3000,
+	// 	func : function() {
+	// 		for(var i=0; i<DEFIINE_instanceNum; i++) {
+	// 			instanceObject[i].uniqueFlag001 = true;
+	// 		};
+	// 	}
+	// },
+	// {
+	// 	time : 1000,
+	// 	func : function() {
+	// 		controll.staticFlag = "freemap_disconnected";
+	// 		staticTransformSeries(800);
+	// 	}
+	// },
+
+
+
 	{
 		time : 500,
-		func : function() {
-			init.nodeStrokeFlag = true;
-			controll.staticFlag = "fontmap_firstTitle";
-			staticTransformSeries(1000);
-		}
-	},
-	{
-		time : 3000,
-		func : function() {
-			for(var i=0; i<DEFIINE_instanceNum; i++) {
-				instanceObject[i].uniqueFlag001 = true;
-			};
-		}
-	},
-	{
-		time : 1000,
-		func : function() {
-			controll.staticFlag = "freemap_disconnected";
-			staticTransformSeries(800);
-		}
-	},
-	{
-		time : 2500,
 		func : function() {
 			for(var i=0; i<DEFIINE_instanceNum; i++) {
 				instanceObject[i].uniqueFlag001 = false;
 			};
 			controll.dynamicFlag = 0;
-			init.nodeStrokeFlag = false;
+			init.nodeStrokeFlag = true;
 			controll.staticFlag = "fontmap_secondTitle";
-			staticTransformSeries(300);
+			staticTransformSeries(100);//速さ
 		}
 	},
+
+	
 	{
-		time : 2500,
+		time : 3700,
 		func : function() {
 			controll.staticFlag = "freemap_random";
 			staticTransformParallel(1000);
 		}
 	},
+
+
 	{
-		time : 1000,
+		time : 500,
 		func : function() {
-			init.nodeStrokeFlag = true;
-			controll.dynamicFlag = 3;
-		}
-	},
-	
-	{
-		time : 2000,
-		func : function() {
+			init.nodeStrokeFlag = false;
+			controll.dynamicFlag = 2;
 			controll.staticFlag = "fontmap_firstTitle";
-			staticTransformSeries(500);
+			staticTransformSeries(50);
 		}
 	},
-	{
-		time : 2000,
-		func : function() {
-			controll.staticFlag = "fontmap_firstTitle";
-			staticTransformSeries(500);
-		}
-	},
-	{
-		time : 2000,
-		func : function() {
-			controll.staticFlag = "freemap_random";
-			staticTransformSeries(800);
-		}
-	},
-	{
-		time : 2500,
-		func : function() {
-			controll.staticFlag = "freemap_random";
-			staticTransformSeries(800);
-		}
-	},
-	{
-		time : 2000,
-		func : function() {
-			controll.staticFlag = "freemap_random";
-			staticTransformSeries(800);
-		}
-	},
+	// {
+	// 	time : 2000,
+	// 	func : function() {
+	// 		controll.staticFlag = "fontmap_firstTitle";
+	// 		staticTransformSeries(500);
+	// 	}
+	// },
 	{
 		time : 3000,
 		func : function() {
-			controll.staticFlag = "freemap_disconnected";
-			staticTransformSeries(500);
-		}
-	},
-	{
-		time : 1500,
-		func : function() {
-			init.nodeStrokeFlag = false;
-			controll.dynamicFlag = 0;
-			controll.staticFlag = "fontmap_fullchara";
-			staticTransformParallel(1000);
-		}
-	},
-	{
-		time : 1500,
-		func : function() {
-			controll.dynamicFlag = 1;
-		}
-	},
-	{
-		time : 2000,
-		func : function() {
-			controll.dynamicFlag = 2;
-		}
-	},
-	{
-		time : 1500,
-		func : function() {
-			controll.dynamicFlag = 1;
-		}
-	},
-	{
-		time : 1500,
-		func : function() {
-			init.nodeStrokeFlag = true;
-			controll.dynamicFlag = 4;
-		}
-	},
-	{
-		time : 2500,
-		func : function() {
-			init.nodeStrokeFlag = false;
-			controll.dynamicFlag = 0;
-			controll.staticFlag = "fontmap_fullchara";
-			staticTransformParallel(1000);
-		}
-	},
-	{
-		time : 2000,
-		func : function() {
-			init.nodeStrokeFlag = true;
-			controll.dynamicFlag = 0;
-			controll.staticFlag = "freemap_disconnected";
+			controll.staticFlag = "freemap_random";
 			staticTransformSeries(800);
 		}
 	},
 	{
-		time : 10000,
+		time : 2000,
 		func : function() {
 		}
 	},
+	// {
+	// 	time : 2500,
+	// 	func : function() {
+	// 		controll.staticFlag = "freemap_random";
+	// 		staticTransformSeries(800);
+	// 	}
+	// },
+	// {
+	// 	time : 2000,
+	// 	func : function() {
+	// 		controll.staticFlag = "freemap_random";
+	// 		staticTransformSeries(800);
+	// 	}
+	// },
+	// {
+	// 	time : 3000,
+	// 	func : function() {
+	// 		controll.staticFlag = "freemap_disconnected";
+	// 		staticTransformSeries(500);
+	// 	}
+	// },
+	// {
+	// 	time : 1500,
+	// 	func : function() {
+	// 		init.nodeStrokeFlag = false;
+	// 		controll.dynamicFlag = 0;
+	// 		controll.staticFlag = "fontmap_fullchara";
+	// 		staticTransformParallel(1000);
+	// 	}
+	// },
+	// {
+	// 	time : 1500,
+	// 	func : function() {
+	// 		controll.dynamicFlag = 1;
+	// 	}
+	// },
+	// {
+	// 	time : 2000,
+	// 	func : function() {
+	// 		controll.dynamicFlag = 2;
+	// 	}
+	// },
+	// {
+	// 	time : 1500,
+	// 	func : function() {
+	// 		controll.dynamicFlag = 1;
+	// 	}
+	// },
+	// {
+	// 	time : 1500,
+	// 	func : function() {
+	// 		init.nodeStrokeFlag = true;
+	// 		controll.dynamicFlag = 4;
+	// 	}
+	// },
+	// {
+	// 	time : 2500,
+	// 	func : function() {
+	// 		init.nodeStrokeFlag = false;
+	// 		controll.dynamicFlag = 0;
+	// 		controll.staticFlag = "fontmap_fullchara";
+	// 		staticTransformParallel(1000);
+	// 	}
+	// },
+	// {
+	// 	time : 2000,
+	// 	func : function() {
+	// 		init.nodeStrokeFlag = true;
+	// 		controll.dynamicFlag = 0;
+	// 		controll.staticFlag = "freemap_disconnected";
+	// 		staticTransformSeries(800);
+	// 	}
+	// },
+	// {
+	// 	time : 1000,
+	// 	func : function() {
+	// 	}
+	// },
 ];
 
-
+var ENABLE_INFINITY_LOOP = true;
 
 var motionIndex = 0;
 
@@ -2443,7 +2930,16 @@ var motionChanger = function() {
 	setTimeout(function() {
 		motionSet[motionIndex].func();
 		motionIndex++;
-		if(motionSet.length == motionIndex) motionIndex = 0; 
+
+		if(motionSet.length == motionIndex){
+			if (ENABLE_INFINITY_LOOP){
+				motionIndex = 0;
+			}
+			else {
+				//ここで止める
+				IS_END = true;
+			}
+		}
 		motionChanger();
 	}, motionSet[motionIndex].time);
 };

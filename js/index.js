@@ -42,6 +42,26 @@ var COLOR_CONFIG = {
 
 
 
+//線の色をここで決めてる
+var LINE_ALPHA = 0.15
+var LINE_STROKE_COLORS = function() {
+	return {
+			r : Math.random(),
+			g : Math.random(),
+			b : Math.random(),
+			a : LINE_ALPHA
+		};
+}
+
+
+//色んな色をこれでランダムにした
+var RANDOM_COLORS = function(i) {
+	return {r:Math.random(), g:Math.random(), b:Math.random(), a:1.0}
+}
+
+
+
+
 CHAR_MAP = {
 	'A': [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],
 	'B': [[0,4,0,0,0],[0,3,3,4,0],[0,5,3,1,0],[0,5,2,1,0],[0,3,1,0,0]],
@@ -170,6 +190,10 @@ CHAR_MAP = {
 // 		[0,0,3,4,0]],  
 // 	}
 // ]
+
+
+
+
 
 
 FIRST_TITLE_FONT_MAP_ARRAY = [
@@ -341,8 +365,9 @@ var fontmap_firstTitle = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			//<--------------------------------------------------------------------------------------------------------------ここで三角形の色が決まる	
+			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: 0,
 			position: {x:0, y:0, z:0},
 			rotate: {x:0, y:0, z:0}
@@ -552,8 +577,8 @@ var fontmap_secondTitle = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: 0,
 			position: {x:0, y:0, z:0},
 			rotate: {x:0, y:0, z:0}
@@ -1155,6 +1180,7 @@ var shader = {
 			};
 		}
 	},
+	//<--------------------------------------------------------------------------------------------------ここで三角形を描画してる
 	fillShade : function(augumentColor) {
 		init.ctx.fillStyle = "rgba("+
 			parseInt(augumentColor.r*255) +","+
@@ -1402,8 +1428,10 @@ var objectInit = function() {
 			fill : false,
 			stroke : false,
 			color: {r:0.0, g:0.0, b:0.0, a:0.0},
-			fillColor: {r:0.0, g:0.0, b:0.0, a:0.0},
-			strokeColor: {r:0.0, g:0.0, b:0.0, a:0.0},
+			fillColor: RANDOM_COLORS(i),
+			strokeColor: RANDOM_COLORS(i),
+			// fillColor: {r:0.0, g:0.0, b:0.0, a:0.0},
+			// strokeColor: {r:0.0, g:0.0, b:0.0, a:0.0},
 			size: 0,
 			position: {x:2000*Math.random()-1000, y:2000*Math.random()-1000, z:2000*Math.random()-1000},
 			rotate: {x:720*Math.random()-360, y:720*Math.random()-360, z:720*Math.random()-360}
@@ -1441,8 +1469,8 @@ var freemap_disconnected = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: 0,
 			position: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500},
 			rotate: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500}
@@ -1460,8 +1488,8 @@ var freemap_random = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
+			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: Math.random()*2,
 			position: {x:Math.random()*1500-750, y:Math.random()*1500-750, z:Math.random()*1500-750},
 			rotate: {x:Math.random()*720-360, y:Math.random()*720-360, z:Math.random()*720-360}
@@ -1488,9 +1516,9 @@ var fontmap_fullchara = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: {r:1.0, g:1.0, b:1.0, a:1.0},
-			size: 0,
+			//<--------------------------------------------------------------------------------------------------------------ここで三角形の色が決まる	
+			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},			size: 0,
 			position: {x:0, y:0, z:0},
 			rotate: {x:0, y:0, z:0}
 		};
@@ -2101,6 +2129,9 @@ var backgroundController = {
 backgroundController.init();
 
 
+
+
+//線の描画 <------------------------------------------------------------------------------------------------------------
 var nodeStroke = {
 	vertsArray : new Array(),
 	color : new String(),
@@ -2109,11 +2140,19 @@ var nodeStroke = {
 			r : 1.0,
 			g : 1.0,
 			b : 1.0,
-			a : 0.15
+			a : LINE_ALPHA
 		};
 	},
 	iteration : function() {
 		nodeStroke.vertsArray = [];
+
+
+		//ここで線の色をランダムにした <======****************************************************************************************
+		// console.log(nodeStroke.color);
+		nodeStroke.color = LINE_STROKE_COLORS();
+		// nodeStroke.color.a = 0.75;
+		// console.log(nodeStroke.color);
+
 		if(shader.chromaticAberration.flag === false) {
 			init.ctx.globalCompositeOperation = "source-over";
 			for(var i=0; i<shader.shadeObject.length; i++) {
@@ -2132,12 +2171,15 @@ var nodeStroke = {
 			};
 			init.ctx.closePath();
 					
-			init.ctx.strokeStyle = "rgba(" + 
-				nodeStroke.color.r*255 + "," + 
-				nodeStroke.color.g*255 + "," + 
-				nodeStroke.color.b*255 + "," +
+			var sStyle = "rgba(" + 
+				Math.round( nodeStroke.color.r*255 ) + "," + 
+				Math.round( nodeStroke.color.g*255 ) + "," + 
+				Math.round( nodeStroke.color.b*255 ) + "," +
 				nodeStroke.color.a
 			+ ")";
+			init.ctx.strokeStyle = sStyle;
+			// console.log(sStyle);
+			// console.log(init.ctx.strokeStyle);
 			init.ctx.stroke();
 		} else {
 			init.ctx.globalCompositeOperation = "lighter";
@@ -2157,11 +2199,12 @@ var nodeStroke = {
 			init.ctx.closePath();
 					
 			init.ctx.strokeStyle = "rgba(" + 
-				nodeStroke.color.r*255 + "," + 
+				Math.round(nodeStroke.color.r*255) + "," + 
 				0 + "," + 
 				0 + "," +
 				nodeStroke.color.a/1
 			+ ")";
+			// console.log(init.ctx.strokeStyle);
 			init.ctx.stroke();
 			init.ctx.translate(-shader.chromaticAberration.r.x,-shader.chromaticAberration.r.y);
 			
@@ -2182,10 +2225,11 @@ var nodeStroke = {
 			init.ctx.closePath();
 			init.ctx.strokeStyle = "rgba(" + 
 				0 + "," + 
-				nodeStroke.color.g*255 + "," + 
+				Math.round(nodeStroke.color.g*255) + "," + 
 				0 + "," +
 				nodeStroke.color.a/1.5
 			+ ")";
+			// console.log(init.ctx.strokeStyle);
 			init.ctx.stroke();
 			init.ctx.translate(-shader.chromaticAberration.g.x,-shader.chromaticAberration.g.y);
 			
@@ -2207,9 +2251,10 @@ var nodeStroke = {
 			init.ctx.strokeStyle = "rgba(" + 
 				0 + "," + 
 				0 + "," + 
-				nodeStroke.color.b*255 + "," +
+				Math.round(nodeStroke.color.b*255) + "," +
 				nodeStroke.color.a/2
 			+ ")";
+			// console.log(init.ctx.strokeStyle);
 			init.ctx.stroke();
 			init.ctx.translate(-shader.chromaticAberration.b.x,-shader.chromaticAberration.b.y);
 			
@@ -2219,10 +2264,10 @@ var nodeStroke = {
 nodeStroke.init();
 
 
-
+//<-------------------------------------------------------------------------------------------------------------------------------------------------
 var invertController = {
 	flag : false,
-	iteration : function() {
+	iteration : function() { //フレームごとに呼ばれてる
 		if(invertController.flag == true) {
 			light.enableLight = false;
 			backgroundController.color = COLOR_CONFIG.background_and_lines.light.background;//"rgba(255,255,255,1)";
@@ -2230,9 +2275,9 @@ var invertController = {
 			nodeStroke.color.g = COLOR_CONFIG.background_and_lines.light.line.g;//0.0;
 			nodeStroke.color.b = COLOR_CONFIG.background_and_lines.light.line.b;//0.0;
 			for(var i=0; i<DEFIINE_instanceNum; i++) {
-				instanceObject[i].fillColor.r = 1.0 - instanceObject[i].fillColor.r;
-				instanceObject[i].fillColor.g = 1.0 - instanceObject[i].fillColor.g;
-				instanceObject[i].fillColor.b = 1.0 - instanceObject[i].fillColor.b;
+				instanceObject[i].fillColor.r = 1.0 - instanceObject[i].fillColor.r;// * Math.random();// ここで色かえると白い時にカラフルになる
+				instanceObject[i].fillColor.g = 1.0 - instanceObject[i].fillColor.g;// * Math.random();
+				instanceObject[i].fillColor.b = 1.0 - instanceObject[i].fillColor.b;// * Math.random();
 			};
 		} else {
 			nodeStroke.color.r = COLOR_CONFIG.background_and_lines.dark.line.r;//1.0;
@@ -2343,8 +2388,10 @@ var controll = {
 				shade : false,
 				fill : false,
 				stroke : false,
-				fillColor: {r:0, g:0, b:0, a:0},
-				strokeColor: {r:0, g:0, b:0, a:0},
+				// fillColor: {r:0, g:0, b:0, a:0},
+				// strokeColor: {r:0, g:0, b:0, a:0},
+				fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+				strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 				size: 0,
 				position: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500},
 				rotate: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500}
@@ -2598,337 +2645,23 @@ timerIteration();
 
 
 
-// var motionSet = [
-// 	{
-// 		time : 500,
-// 		func : function() {
-// 			init.nodeStrokeFlag = true;
-// 			controll.staticFlag = "fontmap_firstTitle";
-// 			staticTransformSeries(1000);
-// 		}
-// 	},
-// 	{
-// 		time : 3000,
-// 		func : function() {
-// 			for(var i=0; i<DEFIINE_instanceNum; i++) {
-// 				instanceObject[i].uniqueFlag001 = true;
-// 			};
-// 		}
-// 	},
-// 	{
-// 		time : 1000,
-// 		func : function() {
-// 			controll.staticFlag = "freemap_disconnected";
-// 			staticTransformSeries(800);
-// 		}
-// 	},
 
 
 
-// 	{
-// 		time : 2500,
-// 		func : function() {
-// 			for(var i=0; i<DEFIINE_instanceNum; i++) {
-// 				instanceObject[i].uniqueFlag001 = false;
-// 			};
-// 			controll.dynamicFlag = 0;
-// 			init.nodeStrokeFlag = false;
-// 			controll.staticFlag = "fontmap_secondTitle";
-// 			staticTransformSeries(300);
-// 		}
-// 	},
 
 
-// 	{
-// 		time : 2500,
-// 		func : function() {
-// 			controll.staticFlag = "freemap_random";
-// 			staticTransformParallel(1000);
-// 		}
-// 	},
-// 	{
-// 		time : 1000,
-// 		func : function() {
-// 			init.nodeStrokeFlag = true;
-// 			controll.dynamicFlag = 3;
-// 		}
-// 	},
-	
-// 	{
-// 		time : 2000,
-// 		func : function() {
-// 			controll.staticFlag = "fontmap_firstTitle";
-// 			staticTransformSeries(500);
-// 		}
-// 	},
-// 	{
-// 		time : 2000,
-// 		func : function() {
-// 			controll.staticFlag = "fontmap_firstTitle";
-// 			staticTransformSeries(500);
-// 		}
-// 	},
-// 	{
-// 		time : 2000,
-// 		func : function() {
-// 			controll.staticFlag = "freemap_random";
-// 			staticTransformSeries(800);
-// 		}
-// 	},
-// 	{
-// 		time : 2500,
-// 		func : function() {
-// 			controll.staticFlag = "freemap_random";
-// 			staticTransformSeries(800);
-// 		}
-// 	},
-// 	{
-// 		time : 2000,
-// 		func : function() {
-// 			controll.staticFlag = "freemap_random";
-// 			staticTransformSeries(800);
-// 		}
-// 	},
-// 	{
-// 		time : 3000,
-// 		func : function() {
-// 			controll.staticFlag = "freemap_disconnected";
-// 			staticTransformSeries(500);
-// 		}
-// 	},
-// 	{
-// 		time : 1500,
-// 		func : function() {
-// 			init.nodeStrokeFlag = false;
-// 			controll.dynamicFlag = 0;
-// 			controll.staticFlag = "fontmap_fullchara";
-// 			staticTransformParallel(1000);
-// 		}
-// 	},
-// 	{
-// 		time : 1500,
-// 		func : function() {
-// 			controll.dynamicFlag = 1;
-// 		}
-// 	},
-// 	{
-// 		time : 2000,
-// 		func : function() {
-// 			controll.dynamicFlag = 2;
-// 		}
-// 	},
-// 	{
-// 		time : 1500,
-// 		func : function() {
-// 			controll.dynamicFlag = 1;
-// 		}
-// 	},
-// 	{
-// 		time : 1500,
-// 		func : function() {
-// 			init.nodeStrokeFlag = true;
-// 			controll.dynamicFlag = 4;
-// 		}
-// 	},
-// 	{
-// 		time : 2500,
-// 		func : function() {
-// 			init.nodeStrokeFlag = false;
-// 			controll.dynamicFlag = 0;
-// 			controll.staticFlag = "fontmap_fullchara";
-// 			staticTransformParallel(1000);
-// 		}
-// 	},
-// 	{
-// 		time : 2000,
-// 		func : function() {
-// 			init.nodeStrokeFlag = true;
-// 			controll.dynamicFlag = 0;
-// 			controll.staticFlag = "freemap_disconnected";
-// 			staticTransformSeries(800);
-// 		}
-// 	},
-// 	{
-// 		time : 10000,
-// 		func : function() {
-// 		}
-// 	},
-// ];
+
+
 
 
 
 
 var motionSet = [
-
-
 	{
 		time : 500,
-		func : function() {
-			for(var i=0; i<DEFIINE_instanceNum; i++) {
-				instanceObject[i].uniqueFlag001 = false;
-			};
-			controll.dynamicFlag = 0;
-			init.nodeStrokeFlag = false;
-			controll.staticFlag = "fontmap_secondTitle";
-			staticTransformSeries(100);//うごき
-		}
-	},
-
-	{
-		time : 3700,
-		func : function() {
-			controll.staticFlag = "freemap_random";
-			staticTransformParallel(400);
-		}
-	},
-
-
-
-
-	{
-		time : 600,
 		func : function() {
 			init.nodeStrokeFlag = true;
 			controll.staticFlag = "fontmap_firstTitle";
-			staticTransformSeries(100);
-		}
-	},
-
-	{
-		time : 3000,
-		func : function() {
-			for(var i=0; i<DEFIINE_instanceNum; i++) {
-				instanceObject[i].uniqueFlag001 = true;
-			};
-		}
-	},
-
-
-	{
-		time : 3000,
-		func : function() {
-			controll.staticFlag = "freemap_random";
-			staticTransformSeries(800);
-		}
-	},
-	{
-		time : 3000,
-		func : function() {
-		}
-	},
-
-	// {
-	// 	time : 500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = false;
-	// 		controll.dynamicFlag = 2;
-	// 		controll.staticFlag = "fontmap_firstTitle";
-	// 		staticTransformSeries(50);
-	// 	}
-	// },
-
-
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.staticFlag = "fontmap_firstTitle";
-	// 		staticTransformSeries(500);
-	// 	}
-	// },
-
-
-
-	// {
-	// 	time : 2500,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_random";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_random";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-	// {
-	// 	time : 3000,
-	// 	func : function() {
-	// 		controll.staticFlag = "freemap_disconnected";
-	// 		staticTransformSeries(500);
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = false;
-	// 		controll.dynamicFlag = 0;
-	// 		controll.staticFlag = "fontmap_fullchara";
-	// 		staticTransformParallel(1000);
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		controll.dynamicFlag = 1;
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		controll.dynamicFlag = 2;
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		controll.dynamicFlag = 1;
-	// 	}
-	// },
-	// {
-	// 	time : 1500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = true;
-	// 		controll.dynamicFlag = 4;
-	// 	}
-	// },
-	// {
-	// 	time : 2500,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = false;
-	// 		controll.dynamicFlag = 0;
-	// 		controll.staticFlag = "fontmap_fullchara";
-	// 		staticTransformParallel(1000);
-	// 	}
-	// },
-	// {
-	// 	time : 2000,
-	// 	func : function() {
-	// 		init.nodeStrokeFlag = true;
-	// 		controll.dynamicFlag = 0;
-	// 		controll.staticFlag = "freemap_disconnected";
-	// 		staticTransformSeries(800);
-	// 	}
-	// },
-	// {
-	// 	time : 1000,
-	// 	func : function() {
-	// 	}
-	// },
-];
-
-
-
-
-
-
-var motionSet = [
-	{
-		time : 500,
-		func : function() {
-			init.nodeStrokeFlag = true;
-			controll.staticFlag = "fontmap_secondTitle";
 			staticTransformSeries(1000);
 		}
 	},
@@ -2949,6 +2682,7 @@ var motionSet = [
 	},
 
 
+
 	{
 		time : 2500,
 		func : function() {
@@ -2957,7 +2691,7 @@ var motionSet = [
 			};
 			controll.dynamicFlag = 0;
 			init.nodeStrokeFlag = false;
-			controll.staticFlag = "fontmap_firstTitle";
+			controll.staticFlag = "fontmap_secondTitle";
 			staticTransformSeries(300);
 		}
 	},
@@ -2973,10 +2707,172 @@ var motionSet = [
 	{
 		time : 1000,
 		func : function() {
+			init.nodeStrokeFlag = true;
+			controll.dynamicFlag = 3;
 		}
 	},
 	
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "fontmap_firstTitle";
+			staticTransformSeries(500);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "fontmap_firstTitle";
+			staticTransformSeries(500);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "freemap_random";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 2500,
+		func : function() {
+			controll.staticFlag = "freemap_random";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.staticFlag = "freemap_random";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 3000,
+		func : function() {
+			controll.staticFlag = "freemap_disconnected";
+			staticTransformSeries(500);
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			init.nodeStrokeFlag = false;
+			controll.dynamicFlag = 0;
+			controll.staticFlag = "fontmap_fullchara";
+			staticTransformParallel(1000);
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			controll.dynamicFlag = 1;
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			controll.dynamicFlag = 2;
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			controll.dynamicFlag = 1;
+		}
+	},
+	{
+		time : 1500,
+		func : function() {
+			init.nodeStrokeFlag = true;
+			controll.dynamicFlag = 4;
+		}
+	},
+	{
+		time : 2500,
+		func : function() {
+			init.nodeStrokeFlag = false;
+			controll.dynamicFlag = 0;
+			controll.staticFlag = "fontmap_fullchara";
+			staticTransformParallel(1000);
+		}
+	},
+	{
+		time : 2000,
+		func : function() {
+			init.nodeStrokeFlag = true;
+			controll.dynamicFlag = 0;
+			controll.staticFlag = "freemap_disconnected";
+			staticTransformSeries(800);
+		}
+	},
+	{
+		time : 10000,
+		func : function() {
+		}
+	},
 ];
+
+
+
+
+
+
+//------------------------------------------------　すぐ終わるバージョン　------------------------------------------
+// var motionSet = [
+// 	{
+// 		time : 500,
+// 		func : function() {
+// 			init.nodeStrokeFlag = true;
+// 			controll.staticFlag = "fontmap_secondTitle";
+// 			staticTransformSeries(1000);
+// 		}
+// 	},
+// 	{
+// 		time : 3000,
+// 		func : function() {
+// 			for(var i=0; i<DEFIINE_instanceNum; i++) {
+// 				instanceObject[i].uniqueFlag001 = true;
+// 			};
+// 		}
+// 	},
+// 	{
+// 		time : 1000,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_disconnected";
+// 			staticTransformSeries(800);
+// 		}
+// 	},
+
+
+// 	{
+// 		time : 2500,
+// 		func : function() {
+// 			for(var i=0; i<DEFIINE_instanceNum; i++) {
+// 				instanceObject[i].uniqueFlag001 = false;
+// 			};
+// 			controll.dynamicFlag = 0;
+// 			init.nodeStrokeFlag = false;
+// 			controll.staticFlag = "fontmap_firstTitle";
+// 			staticTransformSeries(300);
+// 		}
+// 	},
+
+
+// 	{
+// 		time : 2500,
+// 		func : function() {
+// 			controll.staticFlag = "freemap_random";
+// 			staticTransformParallel(1000);
+// 		}
+// 	},
+// 	{
+// 		time : 1000,
+// 		func : function() {
+// 		}
+// 	},
+	
+// ];
 
 
 

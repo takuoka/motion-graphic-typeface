@@ -1,16 +1,17 @@
 
 
 
-//TODO
-//それぞれのオブジェクト描画するときに色を変えたい
-//描画してるところを探す
+//-------------------------------- c o n f i g ---------------------------------
+
+//無限ループ
+var ENABLE_INFINITY_LOOP = false;
 
 
-
+//全体の色を決める
 var COLOR_CONFIG = {
 	background_and_lines: {
 		light: {
-			background: "rgba(255,255,255,1)",
+			background: "rgba(255,255,255,1)",//"rgba(255,255,255,1)",
 			line: {
 				r: 0.0,
 				g: 0.0,
@@ -18,7 +19,7 @@ var COLOR_CONFIG = {
 			}
 		},
 		dark: {
-			background: "rgba(0,0,0,1)",
+			background: "rgba(0,0,0,1)",//"rgba(0,0,0,1)",
 			line: {
 				r: 1.0,
 				g: 1.0,
@@ -42,27 +43,25 @@ var COLOR_CONFIG = {
 
 
 
-//線の色をここで決めてる
-var LINE_ALPHA = 0.15
+//色をここで決めるようにした
+var LINE_ALPHA = 0.15//default: 0.15
+// var LINE_ALPHA_DENOMINATOR_AT_ABERRATION = 6
 var LINE_STROKE_COLORS = function() {
-	return {
-			r : Math.random(),
-			g : Math.random(),
-			b : Math.random(),
-			a : LINE_ALPHA
-		};
+	return null;
+	// return {r: Math.random(), g: Math.random(), b: Math.random(), a: LINE_ALPHA};
+}
+var WHITE_OBJECT_COLORS = function(i) {
+	return {r:1.0, g:1.0, b:1.0, a:1.0};
+	// return {r:Math.random(), g:Math.random(), b:Math.random(), a:1.0};
+}
+var BLACK_OBJECT_COLORS = function(i) {
+	return {r:0.0, g:0.0, b:0.0, a:0.0};
+	// return {r:Math.random(), g:Math.random(), b:Math.random(), a:1.0};
 }
 
 
-//色んな色をこれでランダムにした
-var RANDOM_COLORS = function(i) {
-	return {r:Math.random(), g:Math.random(), b:Math.random(), a:1.0}
-}
 
-
-
-
-CHAR_MAP = {
+var CHAR_MAP = {
 	'A': [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],
 	'B': [[0,4,0,0,0],[0,3,3,4,0],[0,5,3,1,0],[0,5,2,1,0],[0,3,1,0,0]],
 	'C': [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],
@@ -91,7 +90,7 @@ CHAR_MAP = {
 	'Z': [[0,0,0,0,0],[0,2,5,1,0],[0,0,2,1,0],[0,2,1,0,0],[2,5,1,1,0]],
 	'.': [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,5,0,0,0]],
 	',': [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,1,0,0,0]],
-	'!': [[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0],[0,0,1,0,0]],
+	'!': [[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,0,0,0],[0,0,5,0,0]],
 	'?': [[0,0,2,4,0],[0,0,0,2,0],[0,0,2,1,0],[0,0,1,0,0],[0,0,1,0,0]],
 	'1': [[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,3,0,0]],
 	'2': [[0,0,0,0,0],[0,0,3,4,0],[0,0,2,1,0],[0,2,1,0,0],[0,3,2,4,0]],
@@ -107,96 +106,9 @@ CHAR_MAP = {
 
 
 
-// FIRST_TITLE_FONT_MAP_ARRAY = [
-// 	{//S
-// 		center : {x:-3.5, y:0.15, z:0}, 
-// 		map : [
-// 		[0,0,0,4,0],
-// 		[0,2,1,0,0],
-// 		[0,0,3,4,0],
-// 		[0,3,2,1,0],
-// 		[0,0,1,0,0]],  
-// 	},
-// 	{//O
-// 		center : {x:-2.5, y:0.15, z:0}, 
-// 		map : [
-// 		[0,0,4,0,0],
-// 		[0,2,1,4,0],
-// 		[0,1,0,3,0],
-// 		[0,3,4,1,0],
-// 		[0,0,3,0,0]],  
-// 	},
-// 	{//L
-// 		center : {x:-1.5, y:0.15, z:0}, 
-// 		map : [
-// 		[0,4,0,0,0],
-// 		[0,5,0,0,0],
-// 		[0,5,0,0,0],
-// 		[0,3,0,0,0],
-// 		[0,0,3,4,0]],  
-// 	},
-// 	{//I
-// 		center : {x:-0.8, y:0.15, z:0}, 
-// 		map : [
-// 		[0,0,2,0,0],
-// 		[0,0,2,0,0],
-// 		[0,0,5,0,0],
-// 		[0,0,5,0,0],
-// 		[0,0,1,0,0]],  
-// 	},
-// 	{//D
-// 		center : {x:0, y:0.15, z:0}, 
-// 		map : [
-// 		[0,4,0,0,0],
-// 		[0,3,3,4,0],
-// 		[0,5,0,5,0],
-// 		[0,5,2,1,0],
-// 		[0,1,1,0,0]],  
-// 	},
-// 	{//C
-// 		center : {x:1, y:-0.15, z:0}, 
-// 		map : [
-// 		[0,0,4,0,0],
-// 		[0,2,1,4,0],
-// 		[0,1,0,0,0],
-// 		[0,3,4,1,0],
-// 		[0,0,3,0,0]],  
-// 	},
-// 	{//E
-// 		center : {x:2, y:-0.15, z:0}, 
-// 		map : [
-// 		[0,0,2,1,0],
-// 		[0,2,1,0,0],
-// 		[0,2,2,1,0],
-// 		[0,5,0,2,0],
-// 		[0,1,3,1,0]],  
-// 	},
-// 	{//L
-// 		center : {x:3, y:-0.15, z:0}, 
-// 		map : [
-// 		[0,4,0,0,0],
-// 		[0,5,0,0,0],
-// 		[0,5,0,0,0],
-// 		[0,3,0,0,0],
-// 		[0,0,3,4,0]],  
-// 	},
-// 	{//L
-// 		center : {x:3.6, y:-0.15, z:0}, 
-// 		map : [
-// 		[0,4,0,0,0],
-// 		[0,5,0,0,0],
-// 		[0,5,0,0,0],
-// 		[0,3,0,0,0],
-// 		[0,0,3,4,0]],  
-// 	}
-// ]
 
 
-
-
-
-
-FIRST_TITLE_FONT_MAP_ARRAY = [
+var FIRST_TITLE_FONT_MAP_ARRAY = [
 	{
 		center : {x:-4 -0.0, y:0, z:0}, 
 		map : CHAR_MAP['C'],  
@@ -233,47 +145,12 @@ FIRST_TITLE_FONT_MAP_ARRAY = [
 		center : {x:4 -0.0, y:0, z:0}, 
 		map : CHAR_MAP['!'],  
 	},
-	// {
-	// 	center : {x:5 -0.3, y:0, z:0}, 
-	// 	map : CHAR_MAP['N'],  
-	// }
 ]
 
 
-// SECOND_TITLE_FONT_MAP_ARRAY = [
-// 	{//H
-// 		center : {x:-3.5, y:0, z:0}, 
-// 		map : [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]]
-// 	},
-// 	{//A
-// 		center : {x:-2.5, y:0, z:0}, 
-// 		map : [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]]
-// 	},
-// 	{//C
-// 		center : {x:-1.5, y:0, z:0}, 
-// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]]
-// 	},
-// 	{//K
-// 		center : {x:-0.5, y:0, z:0}, 
-// 		map : [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]]
-// 	},
-// 	{//Y
-// 		center : {x:1.0, y:0, z:0}, 
-// 		map : [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]]
-// 	},
-// 	{//O
-// 		center : {x:2.0, y:0, z:0}, 
-// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]]
-// 	},
-// 	{//U
-// 		center : {x:3.0, y:0, z:0}, 
-// 		map : [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]]
-// 	}
-// ];
 
 
-
-SECOND_TITLE_FONT_MAP_ARRAY = [
+var SECOND_TITLE_FONT_MAP_ARRAY = [
 	{
 		center : {x:-4 +0.5, y:0, z:0}, 
 		map : CHAR_MAP['T'],  
@@ -309,15 +186,33 @@ SECOND_TITLE_FONT_MAP_ARRAY = [
 ];
 
 
-
-
-
-
-
-
-
-
 //----------------------------------- end of config ------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -366,87 +261,13 @@ var fontmap_firstTitle = function() {
 			fill : false,
 			stroke : false,
 			//<--------------------------------------------------------------------------------------------------------------ここで三角形の色が決まる	
-			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			fillColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: 0,
 			position: {x:0, y:0, z:0},
 			rotate: {x:0, y:0, z:0}
 		};
 	};
-	// this.fontMapData = [
-	// 	{//S
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-3.5, y:this.row*0.15, z:0}, 
-	// 		map : [[0,0,0,4,0],[0,2,1,0,0],[0,0,3,4,0],[0,3,2,1,0],[0,0,1,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//O
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-2.5, y:this.row*0.15, z:0}, 
-	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//L
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-1.5, y:this.row*0.15, z:0}, 
-	// 		map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//I
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-0.8, y:this.row*0.15, z:0}, 
-	// 		map : [[0,0,2,0,0],[0,0,2,0,0],[0,0,5,0,0],[0,0,5,0,0],[0,0,1,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//D
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*0, y:this.row*0.15, z:0}, 
-	// 		map : [[0,4,0,0,0],[0,3,3,4,0],[0,5,0,5,0],[0,5,2,1,0],[0,1,1,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//C
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*1, y:this.row*-0.15, z:0}, 
-	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//E
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*2, y:this.row*-0.15, z:0}, 
-	// 		map : [[0,0,2,1,0],[0,2,1,0,0],[0,2,2,1,0],[0,5,0,2,0],[0,1,3,1,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//L
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*3, y:this.row*-0.15, z:0}, 
-	// 		map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//L
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*3.6, y:this.row*-0.15, z:0}, 
-	// 		map : [[0,4,0,0,0],[0,5,0,0,0],[0,5,0,0,0],[0,3,0,0,0],[0,0,3,4,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	}
-	// ];
 	this.fontMapData = FIRST_TITLE_FONT_MAP_ARRAY;
 	for (i in this.fontMapData) {
 		this.fontMapData[i].cellLength = this.cellLength;
@@ -577,71 +398,13 @@ var fontmap_secondTitle = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			fillColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: 0,
 			position: {x:0, y:0, z:0},
 			rotate: {x:0, y:0, z:0}
 		};
 	};
-	// this.fontMapData = [
-	// 	{//H
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-3.5, y:this.row*0, z:0}, 
-	// 		map : [[0,4,0,2,0],[0,5,0,1,0],[0,2,1,5,0],[0,5,0,5,0],[0,1,0,3,0]] ,  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//A
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-2.5, y:this.row*0, z:0}, 
-	// 		map : [[0,0,0,2,0],[0,0,2,5,0],[0,2,1,1,0],[0,1,3,5,0],[0,1,0,1,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//C
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-1.5, y:this.row*0, z:0}, 
-	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,0,0],[0,3,4,1,0],[0,0,3,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//K
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*-0.5, y:this.row*0, z:0}, 
-	// 		map : [[0,4,0,0,0],[0,4,0,2,0],[0,5,2,1,0],[0,5,0,4,0],[0,1,0,3,0]] ,  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//Y
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*1.0, y:this.row*0, z:0}, 
-	// 		map : [[0,0,0,2,0],[0,4,0,1,0],[0,3,2,0,0],[0,0,5,0,0],[0,0,3,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//O
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*2.0, y:this.row*0, z:0}, 
-	// 		map : [[0,0,4,0,0],[0,2,1,4,0],[0,1,0,3,0],[0,3,4,1,0],[0,0,3,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	},
-	// 	{//U
-	// 		cellLength : this.cellLength,
-	// 		cellSpace : this.cellSpace,
-	// 		center : {x:this.col*3.0, y:this.row*0, z:0}, 
-	// 		map : [[0,0,0,4,0],[0,2,0,3,0],[0,5,0,5,0],[0,5,0,1,0],[0,3,1,0,0]],  
-	// 		mapDataNum : 5*5*2,
-	// 		colUnit : 5*2
-	// 	}
-	// ];
 	this.fontMapData = SECOND_TITLE_FONT_MAP_ARRAY;
 	for (i in this.fontMapData) {
 		this.fontMapData[i].cellLength = this.cellLength;
@@ -787,13 +550,12 @@ var fontmap_secondTitle = function() {
 
 <!-- init -->
 window.onresize = function() {
-console.log(window.innerWidth)
 	init.size.x = window.innerWidth;
 	init.size.y = window.innerHeight;
 	init.canvas.width = init.size.x;
 	init.canvas.height = init.size.y;
-	camera.display.x = init.size.x/2;
-	camera.display.y = init.size.y/2;
+	camera.display.x = init.size.x / 2;
+	camera.display.y = init.size.y / 2;
 };
 
 
@@ -1428,8 +1190,8 @@ var objectInit = function() {
 			fill : false,
 			stroke : false,
 			color: {r:0.0, g:0.0, b:0.0, a:0.0},
-			fillColor: RANDOM_COLORS(i),
-			strokeColor: RANDOM_COLORS(i),
+			fillColor: BLACK_OBJECT_COLORS(i),
+			strokeColor: BLACK_OBJECT_COLORS(i),
 			// fillColor: {r:0.0, g:0.0, b:0.0, a:0.0},
 			// strokeColor: {r:0.0, g:0.0, b:0.0, a:0.0},
 			size: 0,
@@ -1469,8 +1231,8 @@ var freemap_disconnected = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			fillColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: 0,
 			position: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500},
 			rotate: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500}
@@ -1488,8 +1250,8 @@ var freemap_random = function() {
 			shade : false,
 			fill : false,
 			stroke : false,
-			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			fillColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 			size: Math.random()*2,
 			position: {x:Math.random()*1500-750, y:Math.random()*1500-750, z:Math.random()*1500-750},
 			rotate: {x:Math.random()*720-360, y:Math.random()*720-360, z:Math.random()*720-360}
@@ -1517,8 +1279,8 @@ var fontmap_fullchara = function() {
 			fill : false,
 			stroke : false,
 			//<--------------------------------------------------------------------------------------------------------------ここで三角形の色が決まる	
-			fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
-			strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},			size: 0,
+			fillColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+			strokeColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},			size: 0,
 			position: {x:0, y:0, z:0},
 			rotate: {x:0, y:0, z:0}
 		};
@@ -2131,6 +1893,7 @@ backgroundController.init();
 
 
 
+
 //線の描画 <------------------------------------------------------------------------------------------------------------
 var nodeStroke = {
 	vertsArray : new Array(),
@@ -2146,10 +1909,10 @@ var nodeStroke = {
 	iteration : function() {
 		nodeStroke.vertsArray = [];
 
-
 		//ここで線の色をランダムにした <======****************************************************************************************
 		// console.log(nodeStroke.color);
-		nodeStroke.color = LINE_STROKE_COLORS();
+		var strokeColors = LINE_STROKE_COLORS();
+		if (strokeColors) nodeStroke.color = strokeColors;
 		// nodeStroke.color.a = 0.75;
 		// console.log(nodeStroke.color);
 
@@ -2202,7 +1965,7 @@ var nodeStroke = {
 				Math.round(nodeStroke.color.r*255) + "," + 
 				0 + "," + 
 				0 + "," +
-				nodeStroke.color.a/1
+				nodeStroke.color.a / 1//LINE_ALPHA_DENOMINATOR_AT_ABERRATION//1
 			+ ")";
 			// console.log(init.ctx.strokeStyle);
 			init.ctx.stroke();
@@ -2227,7 +1990,7 @@ var nodeStroke = {
 				0 + "," + 
 				Math.round(nodeStroke.color.g*255) + "," + 
 				0 + "," +
-				nodeStroke.color.a/1.5
+				nodeStroke.color.a / 1.5//LINE_ALPHA_DENOMINATOR_AT_ABERRATION//1.5
 			+ ")";
 			// console.log(init.ctx.strokeStyle);
 			init.ctx.stroke();
@@ -2252,7 +2015,7 @@ var nodeStroke = {
 				0 + "," + 
 				0 + "," + 
 				Math.round(nodeStroke.color.b*255) + "," +
-				nodeStroke.color.a/2
+				nodeStroke.color.a / 2//LINE_ALPHA_DENOMINATOR_AT_ABERRATION//2
 			+ ")";
 			// console.log(init.ctx.strokeStyle);
 			init.ctx.stroke();
@@ -2390,8 +2153,8 @@ var controll = {
 				stroke : false,
 				// fillColor: {r:0, g:0, b:0, a:0},
 				// strokeColor: {r:0, g:0, b:0, a:0},
-				fillColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
-				strokeColor: RANDOM_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+				fillColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
+				strokeColor: WHITE_OBJECT_COLORS(i),//{r:1.0, g:1.0, b:1.0, a:1.0},
 				size: 0,
 				position: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500},
 				rotate: {x:Math.random()*1000-500, y:Math.random()*1000-500, z:Math.random()*1000-500}
@@ -2877,7 +2640,6 @@ var motionSet = [
 
 
 
-var ENABLE_INFINITY_LOOP = false;
 
 var motionIndex = 0;
 

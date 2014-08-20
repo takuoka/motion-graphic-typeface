@@ -1,7 +1,13 @@
 
 
 
-//-------------------------------- c o n f i g ---------------------------------
+
+//--------------------------------------------------------------------------------
+//-------------------------------- c o n f i g -----------------------------------
+//--------------------------------------------------------------------------------
+
+// canvas要素 の id
+var CANVAS_ID = "background_animation"
 
 //無限ループ
 var ENABLE_INFINITY_LOOP = false;
@@ -185,8 +191,9 @@ var SECOND_TITLE_FONT_MAP_ARRAY = [
 	},
 ];
 
-
-//----------------------------------- end of config ------------------------------
+//--------------------------------------------------------------------------------
+//------------------------- e n d   o f   c o n f i g ----------------------------
+//--------------------------------------------------------------------------------
 
 
 
@@ -565,7 +572,7 @@ var init = {
 	size : new Object(),
 	nodeStrokeFlag : false,
 	canvasSetup : function() {
-		init.canvas = document.getElementById("canvas");
+		init.canvas = document.getElementById(CANVAS_ID);
 	  init.size.x = window.innerWidth;
 	  init.size.y = window.innerHeight;
 		init.canvas.width = init.size.x;
